@@ -16,6 +16,9 @@ public class VaccineAppointment {
     @ManyToOne(fetch=FetchType.LAZY)
     private User patient;
 
+    @ManyToOne(fetch=FetchType.LAZY)
+    private Doctor doctor;
+
     public Long getId() {
         return id;
     }
@@ -38,5 +41,13 @@ public class VaccineAppointment {
 
     public void setPatient(User patient) {
         this.patient = patient;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 }

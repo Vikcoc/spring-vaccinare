@@ -1,6 +1,8 @@
 package com.vaccin.vaccin.model;
 
 
+import com.vaccin.vaccin.dto.UserCreateDto;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +21,12 @@ public class User {
     private String address;
     private String password;
 
-    @OneToMany(mappedBy="patient", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="patient", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     private List<VaccineAppointment> appointments = new ArrayList<>();
+
+    @OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    @JoinColumn(name="doctor_id", referencedColumnName="id")
+    private Doctor doctor;
 
 
     public Long getId() {
@@ -77,5 +83,23 @@ public class User {
 
     public void setAppointments(List<VaccineAppointment> appointments) {
         this.appointments = appointments;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public User() {
+    }
+
+    public User(UserCreateDto userCreateDto){
+        this.address = userCreateDto.getAddress();
+        this.age = userCreateDto.getAge();
+        this.email = userCreateDto.getEmail();
+        this.name = userCreateDto.getName();
     }
 }
