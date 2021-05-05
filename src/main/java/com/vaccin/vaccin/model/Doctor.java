@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity //test
+@Entity
 @Table(name = "doctors")
 public class Doctor {
 
