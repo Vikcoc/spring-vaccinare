@@ -71,11 +71,11 @@ public class User {
         this.password = password;
     }
 
-//    public List<VaccineAppointment> getAppointments() {
-//        return appointments;
-//    }
-//
-//    public void setAppointments(List<VaccineAppointment> appointments) {
-//        this.appointments = appointments;
-//    }
+    public List<VaccineAppointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<VaccineAppointment> appointments) {
+        this.appointments = appointments;
+    }
 }

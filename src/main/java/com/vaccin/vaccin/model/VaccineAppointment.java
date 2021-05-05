@@ -11,7 +11,7 @@ public class VaccineAppointment {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    private Boolean fuffiled;
+    private Boolean fulfilled;
 
     @ManyToOne(fetch=FetchType.LAZY)
     private User patient;
@@ -24,19 +24,19 @@ public class VaccineAppointment {
         this.id = id;
     }
 
-    public Boolean getFuffiled() {
-        return fuffiled;
+    public Boolean getFulfilled() {
+        return fulfilled;
     }
 
-    public void setFuffiled(Boolean fuffiled) {
-        this.fuffiled = fuffiled;
+    public void setFulfilled(Boolean fulfilled) {
+        this.fulfilled = fulfilled;
     }
 
-//    public com.vaccin.vaccin.model.User getUser() {
-//        return User;
-//    }
-//
-//    public void setUser(com.vaccin.vaccin.model.User user) {
-//        User = user;
-//    }
+    public User getPatient() {
+        return patient;
+    }
+
+    public void setPatient(User patient) {
+        this.patient = patient;
+    }
 }
