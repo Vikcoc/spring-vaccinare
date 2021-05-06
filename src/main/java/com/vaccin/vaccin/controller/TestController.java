@@ -4,10 +4,9 @@ import com.vaccin.vaccin.dto.UserCreateDto;
 import com.vaccin.vaccin.dto.UserDto;
 import com.vaccin.vaccin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,30 +24,41 @@ public class TestController {
 
 
     @GetMapping("/test")
-    public String Test()
+    public String test()
     {
         return "Test successful";
     }
 
-    @GetMapping("/test2")
-    public void Test2() {
-        Function<Integer, Integer> f = x -> x + 1;
-        Function<Integer, Integer> g = x -> x * x;
-
-        List.of(4,6,7).stream()
-                .map(f.compose(g))
-                .forEach(x -> System.out.println(x + " "));
-
-
+    @GetMapping("/test2/{pass}")
+    public String test2(@PathVariable String pass) {
+        return BCrypt.hashpw(pass, BCrypt.gensalt());
     }
 
     @PostMapping("/user")
-    public String PostUser(@RequestBody UserCreateDto userCreateDto){
+    public String postUser(@RequestBody UserCreateDto userCreateDto){
         return userService.createUser(userCreateDto);
     }
 
     @GetMapping("/users")
-    public List<UserDto> GetDoctors(){
+    public List<UserDto> getDoctors(){
         return userService.getDoctors();
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/adminTest")
+    public String udminTest(){
+        return "Admin test";
+    }
+
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    @GetMapping("/doctorTest")
+    public String doctorTest(){
+        return "Doctor test";
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/userTest")
+    public String userTest(){
+        return "User test";
     }
 }

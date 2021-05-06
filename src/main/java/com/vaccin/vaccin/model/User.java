@@ -28,6 +28,8 @@ public class User {
     @JoinColumn(name="doctor_id", referencedColumnName="id")
     private Doctor doctor;
 
+    @ManyToOne(fetch=FetchType.LAZY)
+    private Role role;
 
     public Long getId() {
         return id;
@@ -91,6 +93,14 @@ public class User {
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public User() {
