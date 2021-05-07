@@ -30,6 +30,6 @@ public class UserService {
 
     public List<UserDto> getDoctors(){
         var users = userRepository.getDoctors();
-        return users.stream().map(x -> new UserDto(x)).collect(Collectors.toList());
+        return users.stream().map(UserDto::new).collect(Collectors.toList());
     }
 }

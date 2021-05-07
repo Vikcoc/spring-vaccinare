@@ -1,5 +1,7 @@
 package com.vaccin.vaccin.model;
 
+import com.vaccin.vaccin.dto.VaccineTypeDto;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +18,15 @@ public class VaccineType {
 
     private int daysBetweenShots;
 
-    @OneToMany(fetch =FetchType.LAZY)
-    private List<VaccineShot> vaccineShots
-            = new ArrayList<>();
+    @OneToMany(mappedBy = "vaccineType", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<VaccineCenter> vaccineCenters;
+
+    public VaccineType() { }
+
+    public VaccineType(VaccineTypeDto vaccineTypeDto) {
+        this.brand = vaccineTypeDto.getBrand();
+        this.daysBetweenShots = vaccineTypeDto.getDaysBetweenShots();
+    }
 
     public Long getId() {
         return id;
@@ -28,11 +36,23 @@ public class VaccineType {
         this.id = id;
     }
 
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
     public int getDaysBetweenShots() {
         return daysBetweenShots;
     }
 
     public void setDaysBetweenShots(int daysBetweenShots) {
         this.daysBetweenShots = daysBetweenShots;
+    }
+
+    public List<VaccineCenter> getVaccineCenters() {
+        return vaccineCenters;
     }
 }

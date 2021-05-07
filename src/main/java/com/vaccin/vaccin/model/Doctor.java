@@ -34,4 +34,8 @@ public class Doctor {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public List<VaccineAppointment> getAppointments() {
+        return appointments;
+    }
 }

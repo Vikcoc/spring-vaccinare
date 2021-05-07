@@ -1,5 +1,8 @@
 package com.vaccin.vaccin.model;
 
+import com.vaccin.vaccin.dto.VaccineAppointmentCreateDto;
+import com.vaccin.vaccin.dto.VaccineAppointmentDto;
+
 import javax.persistence.*;
 import java.sql.Time;
 
@@ -9,7 +12,7 @@ import java.sql.Time;
 public class VaccineAppointment {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch=FetchType.LAZY)
@@ -23,6 +26,19 @@ public class VaccineAppointment {
 
     private Boolean fulfilled;
 
+    public VaccineAppointment() { }
+
+    public VaccineAppointment(VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
+
+        this.patient = vaccineAppointmentCreateDto.getPatient();
+
+        // aici review cu Victor
+        this.doctor = vaccineAppointmentCreateDto.getTimeSlot().getVaccineCenter().getDoctor();
+
+        this.timeSlot = vaccineAppointmentCreateDto.getTimeSlot();
+
+        this.fulfilled = false;
+    }
 
     public Long getId() {
         return id;
@@ -30,14 +46,6 @@ public class VaccineAppointment {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Boolean getFulfilled() {
-        return fulfilled;
-    }
-
-    public void setFulfilled(Boolean fulfilled) {
-        this.fulfilled = fulfilled;
     }
 
     public User getPatient() {
@@ -54,5 +62,21 @@ public class VaccineAppointment {
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
+    }
+
+    public TimeSlot getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(TimeSlot timeSlot) {
+        this.timeSlot = timeSlot;
+    }
+
+    public Boolean getFulfilled() {
+        return fulfilled;
+    }
+
+    public void setFulfilled(Boolean fulfilled) {
+        this.fulfilled = fulfilled;
     }
 }
