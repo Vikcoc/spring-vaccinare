@@ -1,6 +1,7 @@
 package com.vaccin.vaccin.model;
 
 import javax.persistence.*;
+import java.sql.Time;
 
 
 @Entity
@@ -11,13 +12,17 @@ public class VaccineAppointment {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    private Boolean fulfilled;
-
     @ManyToOne(fetch=FetchType.LAZY)
     private User patient;
 
     @ManyToOne(fetch=FetchType.LAZY)
     private Doctor doctor;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    private TimeSlot timeSlot;
+
+    private Boolean fulfilled;
+
 
     public Long getId() {
         return id;
