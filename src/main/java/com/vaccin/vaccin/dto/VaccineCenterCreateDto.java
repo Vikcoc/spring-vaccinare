@@ -7,69 +7,35 @@ public class VaccineCenterCreateDto {
 
     private String name;
     private String address;
-    private Double longitude;
-    private Double latitude;
+    private double latitude;
+    private double longitude;
 
-    private Doctor doctor;
+    private long vaccineTypeId;
 
-    private VaccineType vaccineType;
-
-    private Integer dosesAvailable;
+    private long dosesAvailable;
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
-    public Double getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public Doctor getDoctor() {
-        return doctor;
+    public long getVaccineTypeId() {
+        return vaccineTypeId;
     }
 
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
-    }
-
-    public VaccineType getVaccineType() {
-        return vaccineType;
-    }
-
-    public void setVaccineType(VaccineType vaccineType) {
-        this.vaccineType = vaccineType;
-    }
-
-    public Integer getDosesAvailable() {
+    public long getDosesAvailable() {
         return dosesAvailable;
     }
-
-    public void setDosesAvailable(Integer dosesAvailable) {
-        this.dosesAvailable = dosesAvailable;
-    }
-
+    
 }

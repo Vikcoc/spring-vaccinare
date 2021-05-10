@@ -10,6 +10,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import java.sql.Date;
+
 @SpringBootApplication
 public class VaccinApplication  implements CommandLineRunner {
 
@@ -39,6 +41,7 @@ public class VaccinApplication  implements CommandLineRunner {
 
 		User admin = new User();
 		admin.setEmail("admin@vacc.ro");
+		//admin.setBirthDate(Date.valueOf("2000-01-01"));
 		admin.setAge(400);
 		admin.setAddress("Palatul Cotroceni");
 		admin.setName("Admin");

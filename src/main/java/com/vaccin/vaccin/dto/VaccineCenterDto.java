@@ -8,13 +8,10 @@ public class VaccineCenterDto {
 
     private String name;
     private String address;
-    private Double latitude;
-    private Double longitude;
-
+    private double latitude;
+    private double longitude;
     private String vaccineTypeBrand;
-
-    // sau:
-    // private VaccineType vaccineType;
+    private long dosesAvailable;
 
     public VaccineCenterDto() { }
 
@@ -26,6 +23,7 @@ public class VaccineCenterDto {
         this.longitude = vaccineCenter.getLongitude();
         this.vaccineTypeBrand = vaccineCenter.getVaccineType().getBrand();
     }
+
 
     public String getName() {
         return name;
@@ -43,23 +41,21 @@ public class VaccineCenterDto {
         this.address = address;
     }
 
-    public Double getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public Double getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(Double longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
-
-
 
     public String getVaccineTypeBrand() {
         return vaccineTypeBrand;
@@ -67,5 +63,13 @@ public class VaccineCenterDto {
 
     public void setVaccineTypeBrand(String vaccineTypeBrand) {
         this.vaccineTypeBrand = vaccineTypeBrand;
+    }
+
+    public long getDosesAvailable() {
+        return dosesAvailable;
+    }
+
+    public void setDosesAvailable(long dosesAvailable) {
+        this.dosesAvailable = dosesAvailable;
     }
 }

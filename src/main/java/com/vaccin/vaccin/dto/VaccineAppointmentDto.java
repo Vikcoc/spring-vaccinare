@@ -27,4 +27,19 @@ public class VaccineAppointmentDto {
         this.timeSlot = timeSlot;
     }
 
+    public User getPatient() {
+        return patient;
+    }
+
+    public void setPatient(User patient) {
+        this.patient = patient;
+    }
+
+    public Boolean getFullfiled() {
+        return fullfiled;
+    }
+
+    public void setFullfiled(Boolean fullfiled) {
+        this.fullfiled = fullfiled;
+    }
 }

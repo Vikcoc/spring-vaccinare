@@ -1,6 +1,8 @@
 package com.vaccin.vaccin.service;
 
+import com.vaccin.vaccin.dto.VaccineTypeCreateDto;
 import com.vaccin.vaccin.dto.VaccineTypeDto;
+import com.vaccin.vaccin.model.VaccineCenter;
 import com.vaccin.vaccin.model.VaccineType;
 import com.vaccin.vaccin.repository.VaccineTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +26,13 @@ public class VaccineTypeService {
                 .collect(Collectors.toList());
 
         return vaccineTypeDtoList;
+    }
+
+    public String addType(VaccineTypeCreateDto vaccineTypeCreateDto) {
+        VaccineType vaccineType = new VaccineType(vaccineTypeCreateDto);
+
+        vaccineTypeRepository.save(vaccineType);
+
+        return "Added VaccineType";
     }
 }

@@ -17,16 +17,12 @@ public class VaccineCenter {
 
     private String name;
     private String address;
-    private Double longitude;
     private Double latitude;
-    private Integer dosesAvailable;
+    private Double longitude;
+    private Long dosesAvailable;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private VaccineType vaccineType;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "doctor_id", referencedColumnName = "id")
-    private Doctor doctor;
 
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     private List<TimeSlot> timeSlots = new ArrayList<>();
@@ -37,10 +33,8 @@ public class VaccineCenter {
 
         this.name = vaccineCenterCreateDto.getName();
         this.address = vaccineCenterCreateDto.getAddress();
-        this.longitude = vaccineCenterCreateDto.getLongitude();
         this.latitude = vaccineCenterCreateDto.getLatitude();
-        this.doctor = vaccineCenterCreateDto.getDoctor();
-        this.vaccineType = vaccineCenterCreateDto.getVaccineType();
+        this.longitude = vaccineCenterCreateDto.getLongitude();
         this.dosesAvailable = vaccineCenterCreateDto.getDosesAvailable();
 
     }
@@ -69,14 +63,6 @@ public class VaccineCenter {
         this.address = address;
     }
 
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
     public Double getLatitude() {
         return latitude;
     }
@@ -85,11 +71,19 @@ public class VaccineCenter {
         this.latitude = latitude;
     }
 
-    public Integer getDosesAvailable() {
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Long getDosesAvailable() {
         return dosesAvailable;
     }
 
-    public void setDosesAvailable(Integer dosesAvailable) {
+    public void setDosesAvailable(Long dosesAvailable) {
         this.dosesAvailable = dosesAvailable;
     }
 
@@ -99,14 +93,6 @@ public class VaccineCenter {
 
     public void setVaccineType(VaccineType vaccineType) {
         this.vaccineType = vaccineType;
-    }
-
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
     }
 
     public List<TimeSlot> getTimeSlots() {

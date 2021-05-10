@@ -17,8 +17,8 @@ public class ResourceServer extends ResourceServerConfigurerAdapter {
                 .httpBasic().disable()
                 .authorizeRequests()
                 .antMatchers("/test",
-                        "/test2/{pass}").permitAll()
-                .anyRequest().authenticated();
+                        "/test2/{pass}", "/vaccines").permitAll();
+                //.anyRequest().authenticated();
 
     }
 }

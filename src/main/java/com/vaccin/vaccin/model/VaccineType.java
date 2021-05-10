@@ -1,5 +1,6 @@
 package com.vaccin.vaccin.model;
 
+import com.vaccin.vaccin.dto.VaccineTypeCreateDto;
 import com.vaccin.vaccin.dto.VaccineTypeDto;
 
 import javax.persistence.*;
@@ -23,9 +24,9 @@ public class VaccineType {
 
     public VaccineType() { }
 
-    public VaccineType(VaccineTypeDto vaccineTypeDto) {
-        this.brand = vaccineTypeDto.getBrand();
-        this.daysBetweenShots = vaccineTypeDto.getDaysBetweenShots();
+    public VaccineType(VaccineTypeCreateDto vaccineTypeCreateDto) {
+        this.brand = vaccineTypeCreateDto.getBrand();
+        this.daysBetweenShots = vaccineTypeCreateDto.getDaysBetweenShots();
     }
 
     public Long getId() {

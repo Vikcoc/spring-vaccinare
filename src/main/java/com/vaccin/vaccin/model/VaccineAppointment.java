@@ -4,8 +4,6 @@ import com.vaccin.vaccin.dto.VaccineAppointmentCreateDto;
 import com.vaccin.vaccin.dto.VaccineAppointmentDto;
 
 import javax.persistence.*;
-import java.sql.Time;
-
 
 @Entity
 @Table(name="appointments")
@@ -18,8 +16,8 @@ public class VaccineAppointment {
     @ManyToOne(fetch=FetchType.LAZY)
     private User patient;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    private Doctor doctor;
+//    @ManyToOne(fetch=FetchType.LAZY)
+//    private Doctor doctor;
 
     @ManyToOne(fetch=FetchType.LAZY)
     private TimeSlot timeSlot;
@@ -30,14 +28,6 @@ public class VaccineAppointment {
 
     public VaccineAppointment(VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
 
-        this.patient = vaccineAppointmentCreateDto.getPatient();
-
-        // aici review cu Victor
-        this.doctor = vaccineAppointmentCreateDto.getTimeSlot().getVaccineCenter().getDoctor();
-
-        this.timeSlot = vaccineAppointmentCreateDto.getTimeSlot();
-
-        this.fulfilled = false;
     }
 
     public Long getId() {
@@ -56,13 +46,13 @@ public class VaccineAppointment {
         this.patient = patient;
     }
 
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
-    }
+//    public Doctor getDoctor() {
+//        return doctor;
+//    }
+//
+//    public void setDoctor(Doctor doctor) {
+//        this.doctor = doctor;
+//    }
 
     public TimeSlot getTimeSlot() {
         return timeSlot;

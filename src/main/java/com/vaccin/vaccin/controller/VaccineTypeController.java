@@ -1,9 +1,11 @@
 package com.vaccin.vaccin.controller;
 
+import com.vaccin.vaccin.dto.VaccineTypeCreateDto;
 import com.vaccin.vaccin.dto.VaccineTypeDto;
 import com.vaccin.vaccin.service.VaccineTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -14,7 +16,14 @@ public class VaccineTypeController {
     @Autowired
     VaccineTypeService vaccineTypeService;
 
-    @RequestMapping("/vaccines")
+    @GetMapping("/vaccines/add")
+    public String addVaccineType(@RequestBody VaccineTypeCreateDto vaccineTypeCreateDto) {
+
+        return vaccineTypeService.addType(vaccineTypeCreateDto);
+    }
+
+
+    @GetMapping("/vaccines")
     public List<VaccineTypeDto> getAllVaccineTypes() {
 
         return vaccineTypeService.getAll();

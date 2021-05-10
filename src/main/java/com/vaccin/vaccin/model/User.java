@@ -4,6 +4,7 @@ package com.vaccin.vaccin.model;
 import com.vaccin.vaccin.dto.UserCreateDto;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class User {
     private Long id;
 
     private String name;
+    // private Date birthDate;
     private int age;
     private String address;
     private String cnp;
@@ -37,6 +39,7 @@ public class User {
 
     public User(UserCreateDto userCreateDto){
         this.address = userCreateDto.getAddress();
+        //this.birthDate = userCreateDto.getBirthDate();
         this.age = userCreateDto.getAge();
         this.email = userCreateDto.getEmail();
         this.name = userCreateDto.getName();
@@ -57,6 +60,15 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+
+//    public Date getBirthDate() {
+//        return birthDate;
+//    }
+//
+//    public void setBirthDate(Date birthDate) {
+//        this.birthDate = birthDate;
+//    }
+
 
     public int getAge() {
         return age;

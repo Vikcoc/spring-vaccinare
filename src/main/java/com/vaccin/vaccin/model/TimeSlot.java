@@ -1,7 +1,10 @@
 package com.vaccin.vaccin.model;
 
+import com.vaccin.vaccin.dto.TimeSlotCreateDto;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +19,9 @@ public class TimeSlot {
     @ManyToOne(fetch=FetchType.LAZY)
     private VaccineCenter vaccineCenter;
 
-    private LocalDateTime startTime;
+    private Date date;
+
+    private Time time;
 
     private Boolean full;
 
@@ -25,7 +30,10 @@ public class TimeSlot {
 
     public TimeSlot() { }
 
-    // dto?
+    public TimeSlot(TimeSlotCreateDto timeSlotCreateDto) {
+        this.date = timeSlotCreateDto.getDate();
+        this.time = timeSlotCreateDto.getTime();
+    }
 
     public Long getId() {
         return Id;
@@ -43,12 +51,20 @@ public class TimeSlot {
         this.vaccineCenter = vaccineCenter;
     }
 
-    public LocalDateTime getStartTime() {
-        return startTime;
+    public Date getDate() {
+        return date;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Time getTime() {
+        return time;
+    }
+
+    public void setTime(Time time) {
+        this.time = time;
     }
 
     public Boolean getFull() {
@@ -61,5 +77,9 @@ public class TimeSlot {
 
     public List<VaccineAppointment> getVaccineAppointments() {
         return vaccineAppointments;
+    }
+
+    public void setVaccineAppointments(List<VaccineAppointment> vaccineAppointments) {
+        this.vaccineAppointments = vaccineAppointments;
     }
 }
