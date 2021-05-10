@@ -32,13 +32,6 @@ public class VaccineAppointmentService {
     @Autowired
     private VaccineCenterRepository vaccineCenterRepository;
 
-//    public List<VaccineAppointmentDto> vaccineAppointmentDtoList() {
-//        return vaccineAppointmentRepository
-//                .findAll()
-//                .stream().map(VaccineAppointmentDto::new)
-//                .collect(Collectors.toList());
-//    }
-
     public String addAppointment(VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
 
         // creez un VaccineAppointment

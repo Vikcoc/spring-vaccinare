@@ -16,10 +16,15 @@ import java.util.stream.Collectors;
 @Service
 public class VaccineCenterService {
 
-    @Autowired
     private VaccineCenterRepository vaccineCenterRepository;
-    @Autowired
+
     private VaccineTypeRepository vaccineTypeRepository;
+
+    @Autowired
+    public VaccineCenterService(VaccineCenterRepository vaccineCenterRepository, VaccineTypeRepository vaccineTypeRepository) {
+        this.vaccineCenterRepository = vaccineCenterRepository;
+        this.vaccineTypeRepository = vaccineTypeRepository;
+    }
 
     public List<VaccineCenterDto> getCentersAroundCoords(Double latitude, Double longitude) {
         List<VaccineCenter> vaccineCenters = vaccineCenterRepository.findAll();

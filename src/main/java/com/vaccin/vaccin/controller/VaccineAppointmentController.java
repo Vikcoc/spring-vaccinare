@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class VaccineAppointmentController {
 
-    @Autowired
     private VaccineAppointmentService vaccineAppointmentService;
+
+    @Autowired
+    public VaccineAppointmentController( VaccineAppointmentService vaccineAppointmentService) {
+        this.vaccineAppointmentService = vaccineAppointmentService;
+    }
 
     @RequestMapping("/appointments/add/")
     public String addAppointment(@RequestBody VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {

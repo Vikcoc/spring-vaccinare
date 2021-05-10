@@ -17,10 +17,15 @@ import java.util.Optional;
 @Service
 public class TimeSlotService {
 
-    @Autowired
     private TimeSlotRepository timeSlotRepository;
-    @Autowired
+
     private VaccineCenterRepository vaccineCenterRepository;
+
+    @Autowired
+    public TimeSlotService(TimeSlotRepository timeSlotRepository, VaccineCenterRepository vaccineCenterRepository) {
+        this.timeSlotRepository = timeSlotRepository;
+        this.vaccineCenterRepository = vaccineCenterRepository;
+    }
 
     public String addTimeSlot(TimeSlotCreateDto timeSlotCreateDto) {
 

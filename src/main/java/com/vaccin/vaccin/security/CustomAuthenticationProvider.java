@@ -30,12 +30,10 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 
 
         Optional<AuthDto> optionalAuthDto = userRepository.getByEmailWithPasswordAndRole(email);
-//        Optional<Doctor> optionalDoctor = doctorRepository.findByEmail(email);
 
         if (optionalAuthDto.isPresent()) {
 
             AuthDto authDto = optionalAuthDto.get();
-//            Doctor doctor = optionalDoctor.get();
             String dbPassword = authDto.getPassword();
 
             if (BCrypt.checkpw(inputPassword, dbPassword)) {

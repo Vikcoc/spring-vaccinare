@@ -14,8 +14,12 @@ import java.util.stream.Collectors;
 @Service
 public class VaccineTypeService {
 
-    @Autowired
     private VaccineTypeRepository vaccineTypeRepository;
+
+    @Autowired
+    public VaccineTypeService(VaccineTypeRepository vaccineTypeRepository) {
+        this.vaccineTypeRepository = vaccineTypeRepository;
+    }
 
     public List<VaccineTypeDto> getAll() {
         List<VaccineType> vaccineTypes = vaccineTypeRepository.findAll();
