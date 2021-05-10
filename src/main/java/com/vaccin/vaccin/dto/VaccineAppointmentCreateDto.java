@@ -20,7 +20,6 @@ public class VaccineAppointmentCreateDto {
 
     private Long vaccineCenterId;
 
-
     public Long getPatientId() {
         return patientId;
     }

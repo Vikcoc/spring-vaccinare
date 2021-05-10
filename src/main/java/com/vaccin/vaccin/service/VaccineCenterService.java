@@ -24,7 +24,6 @@ public class VaccineCenterService {
     public List<VaccineCenterDto> getCentersAroundCoords(Double latitude, Double longitude) {
         List<VaccineCenter> vaccineCenters = vaccineCenterRepository.findAll();
 
-        //todo : toate nu unul singur
         List<VaccineCenterDto> vaccineCenterDtoList = vaccineCenters
                 .stream()
                 .filter(vc -> Math.abs(vc.getLongitude() - longitude) < 0.1
