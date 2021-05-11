@@ -14,7 +14,7 @@ public class TimeSlot {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @ManyToOne(fetch=FetchType.LAZY)
     private VaccineCenter vaccineCenter;
@@ -22,6 +22,8 @@ public class TimeSlot {
     private Date date;
 
     private Time time;
+
+    private Integer noOfAppointments;
 
     private Boolean full;
 
@@ -36,11 +38,11 @@ public class TimeSlot {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        id = id;
     }
 
     public VaccineCenter getVaccineCenter() {
@@ -65,6 +67,14 @@ public class TimeSlot {
 
     public void setTime(Time time) {
         this.time = time;
+    }
+
+    public Integer getNoOfAppointments() {
+        return noOfAppointments;
+    }
+
+    public void setNoOfAppointments(Integer noOfAppointments) {
+        this.noOfAppointments = noOfAppointments;
     }
 
     public Boolean getFull() {
