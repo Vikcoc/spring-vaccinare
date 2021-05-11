@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// as putea muta ruta /centers/ aici
+
 @RestController
 public class VaccineCenterController {
 
