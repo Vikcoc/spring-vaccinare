@@ -17,7 +17,7 @@ public class VaccineAppointmentController {
         this.vaccineAppointmentService = vaccineAppointmentService;
     }
 
-    @RequestMapping("/appointments/add/")
+    @RequestMapping("/appointments/add")
     public String addAppointment(@RequestBody VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
 
         return vaccineAppointmentService.addAppointment(vaccineAppointmentCreateDto);
