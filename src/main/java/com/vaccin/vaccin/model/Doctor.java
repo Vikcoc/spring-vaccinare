@@ -16,8 +16,8 @@ public class Doctor {
     @JoinColumn(name="id", referencedColumnName="id")
     private User user;
 
-//    @OneToMany(mappedBy="doctor", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-//    private List<VaccineAppointment> appointments = new ArrayList<>();
+    @OneToMany(mappedBy="doctor", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    private List<VaccineAppointment> appointments = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -35,11 +35,11 @@ public class Doctor {
         this.user = user;
     }
 
-//    public void setAppointments(List<VaccineAppointment> appointments) {
-//        this.appointments = appointments;
-//    }
-//
-//    public List<VaccineAppointment> getAppointments() {
-//        return appointments;
-//    }
+    public void setAppointments(List<VaccineAppointment> appointments) {
+        this.appointments = appointments;
+    }
+
+    public List<VaccineAppointment> getAppointments() {
+        return appointments;
+    }
 }

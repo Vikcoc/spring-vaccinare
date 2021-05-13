@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface TimeSlotRepository extends JpaRepository<TimeSlot, Long> {
 
-    @Query("SELECT t FROM TimeSlot t WHERE t.date = ?1 AND t.time = ?2")
+    @Query("SELECT t FROM TimeSlot t WHERE t.date = ?1 AND t.time = ?2 AND t.vaccineCenter.id = ?3")
     List<TimeSlot> findByDateTimeCenter(Date date, Time time, Long vaccineCenterId);
 }

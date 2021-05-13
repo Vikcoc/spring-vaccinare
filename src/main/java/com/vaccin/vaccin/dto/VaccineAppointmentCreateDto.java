@@ -1,22 +1,15 @@
 package com.vaccin.vaccin.dto;
 
-import com.vaccin.vaccin.model.TimeSlot;
-import com.vaccin.vaccin.model.User;
-
 import java.sql.Date;
 import java.sql.Time;
 
 public class VaccineAppointmentCreateDto {
 
-    //private Long timeSlotId;
-
     private Long patientId;
 
     private String date;
-    //private Date date;
 
     private String time;
-    //private Time time;
 
     private Long vaccineCenterId;
 
@@ -27,23 +20,6 @@ public class VaccineAppointmentCreateDto {
     public void setPatientId(Long patientId) {
         this.patientId = patientId;
     }
-
-//    public Date getDate() {
-//        return date;
-//    }
-//
-//    public void setDate(Date date) {
-//        this.date = date;
-//    }
-//
-//    public Time getTime() {
-//        return time;
-//    }
-//
-//    public void setTime(Time time) {
-//        this.time = time;
-//    }
-
 
     public String getDate() {
         return date;

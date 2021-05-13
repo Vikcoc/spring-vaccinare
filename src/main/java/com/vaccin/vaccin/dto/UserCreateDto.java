@@ -5,7 +5,6 @@ import java.sql.Date;
 public class UserCreateDto {
     private String email;
     private String name;
-    //private Date birthDate;
     private int age;
     private String address;
 
@@ -16,10 +15,6 @@ public class UserCreateDto {
     public String getName() {
         return name;
     }
-
-//    public Date getBirthDate() {
-//        return birthDate;
-//    }
 
 
     public int getAge() {
