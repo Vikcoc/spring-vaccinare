@@ -14,14 +14,17 @@ import java.util.Optional;
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
 
-    @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    public UserDetailServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         Optional<AuthDto> optionalAuthDto = userRepository.getByEmailWithPasswordAndRole(email);
-//        Optional<Doctor> optionalDoctor = doctorRepository.findByEmail(email);
 
         if (optionalAuthDto.isPresent()) {
             return UserPrinciple.build(optionalAuthDto.get());

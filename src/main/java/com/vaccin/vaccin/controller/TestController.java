@@ -2,6 +2,7 @@ package com.vaccin.vaccin.controller;
 
 import com.vaccin.vaccin.dto.UserCreateDto;
 import com.vaccin.vaccin.dto.UserDto;
+import com.vaccin.vaccin.model.VaccineType;
 import com.vaccin.vaccin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,8 +25,8 @@ public class TestController {
 
 
     @GetMapping("/test")
-    public String test()
-    {
+    public String test() {
+
         return "Test successful";
     }
 

@@ -4,6 +4,7 @@ package com.vaccin.vaccin.model;
 import com.vaccin.vaccin.dto.UserCreateDto;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,21 +16,34 @@ public class User {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
     private String name;
+    // private Date birthDate;
     private int age;
     private String address;
+    private String cnp;
+
+    private String email;
     private String password;
 
     @OneToMany(mappedBy="patient", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     private List<VaccineAppointment> appointments = new ArrayList<>();
 
     @OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-    @JoinColumn(name="doctor_id", referencedColumnName="id")
+    @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     private Doctor doctor;
 
     @ManyToOne(fetch=FetchType.LAZY)
     private Role role;
+
+    public User() { }
+
+    public User(UserCreateDto userCreateDto){
+        this.address = userCreateDto.getAddress();
+        //this.birthDate = userCreateDto.getBirthDate();
+        this.age = userCreateDto.getAge();
+        this.email = userCreateDto.getEmail();
+        this.name = userCreateDto.getName();
+    }
 
     public Long getId() {
         return id;
@@ -39,14 +53,6 @@ public class User {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getName() {
         return name;
     }
@@ -54,6 +60,15 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+
+//    public Date getBirthDate() {
+//        return birthDate;
+//    }
+//
+//    public void setBirthDate(Date birthDate) {
+//        this.birthDate = birthDate;
+//    }
+
 
     public int getAge() {
         return age;
@@ -67,8 +82,24 @@ public class User {
         return address;
     }
 
+    public String getCnp() {
+        return cnp;
+    }
+
+    public void setCnp(String cnp) {
+        this.cnp = cnp;
+    }
+
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -101,15 +132,5 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public User() {
-    }
-
-    public User(UserCreateDto userCreateDto){
-        this.address = userCreateDto.getAddress();
-        this.age = userCreateDto.getAge();
-        this.email = userCreateDto.getEmail();
-        this.name = userCreateDto.getName();
     }
 }

@@ -1,17 +1,17 @@
 package com.vaccin.vaccin.model;
 
-import javax.persistence.*;
+import com.vaccin.vaccin.dto.VaccineAppointmentCreateDto;
+import com.vaccin.vaccin.dto.VaccineAppointmentDto;
 
+import javax.persistence.*;
 
 @Entity
 @Table(name="appointments")
 public class VaccineAppointment {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Boolean fulfilled;
 
     @ManyToOne(fetch=FetchType.LAZY)
     private User patient;
@@ -19,20 +19,23 @@ public class VaccineAppointment {
     @ManyToOne(fetch=FetchType.LAZY)
     private Doctor doctor;
 
+    @ManyToOne(fetch=FetchType.LAZY)
+    private TimeSlot timeSlot;
+
+    private Boolean fulfilled;
+
+    public VaccineAppointment() { }
+
+    public VaccineAppointment(VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
+
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Boolean getFulfilled() {
-        return fulfilled;
-    }
-
-    public void setFulfilled(Boolean fulfilled) {
-        this.fulfilled = fulfilled;
     }
 
     public User getPatient() {
@@ -43,11 +46,27 @@ public class VaccineAppointment {
         this.patient = patient;
     }
 
-    public Doctor getDoctor() {
-        return doctor;
+//    public Doctor getDoctor() {
+//        return doctor;
+//    }
+//
+//    public void setDoctor(Doctor doctor) {
+//        this.doctor = doctor;
+//    }
+
+    public TimeSlot getTimeSlot() {
+        return timeSlot;
     }
 
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
+    public void setTimeSlot(TimeSlot timeSlot) {
+        this.timeSlot = timeSlot;
+    }
+
+    public Boolean getFulfilled() {
+        return fulfilled;
+    }
+
+    public void setFulfilled(Boolean fulfilled) {
+        this.fulfilled = fulfilled;
     }
 }
