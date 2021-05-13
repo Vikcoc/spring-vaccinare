@@ -9,12 +9,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 public class VaccineCenterController {
 
-    @Autowired
     VaccineCenterService vaccineCenterService;
+
+    @Autowired
+    public VaccineCenterController (VaccineCenterService vaccineCenterService) {
+        this.vaccineCenterService = vaccineCenterService;
+    }
 
     @GetMapping("/centers/{latitude}/{longitude}")
     public List<VaccineCenterDto> getCentersAround(@PathVariable double latitude,

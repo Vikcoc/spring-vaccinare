@@ -22,14 +22,20 @@ import java.util.Optional;
 @Service
 public class VaccineAppointmentService {
 
-    @Autowired
     private VaccineAppointmentRepository vaccineAppointmentRepository;
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private TimeSlotRepository timeSlotRepository;
-    @Autowired
     private VaccineCenterRepository vaccineCenterRepository;
+
+    @Autowired
+    public VaccineAppointmentService(VaccineAppointmentRepository vaccineAppointmentRepository,
+                                     UserRepository userRepository, TimeSlotRepository timeSlotRepository,
+                                     VaccineCenterRepository vaccineCenterRepository) {
+        this.vaccineAppointmentRepository = vaccineAppointmentRepository;
+        this.userRepository = userRepository;
+        this.timeSlotRepository = timeSlotRepository;
+        this.vaccineCenterRepository = vaccineCenterRepository;
+    }
 
     public String addAppointment(VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
 
@@ -82,6 +88,7 @@ public class VaccineAppointmentService {
             timeSlot.setNoOfAppointments(1);
             timeSlot.setFull(false);
 
+
             // il pun in DB
             timeSlotRepository.save(timeSlot);
 
@@ -92,7 +99,6 @@ public class VaccineAppointmentService {
 
             return "Added VaccineAppointment (new slot)";
         }
-
         // daca totusi exista deja TimeSlot-ul
         TimeSlot timeSlot = timeSlots.get(0);
 

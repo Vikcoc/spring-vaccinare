@@ -16,8 +16,8 @@ public class VaccineAppointment {
     @ManyToOne(fetch=FetchType.LAZY)
     private User patient;
 
-//    @ManyToOne(fetch=FetchType.LAZY)
-//    private Doctor doctor;
+    @ManyToOne(fetch=FetchType.LAZY)
+    private Doctor doctor;
 
     @ManyToOne(fetch=FetchType.LAZY)
     private TimeSlot timeSlot;
