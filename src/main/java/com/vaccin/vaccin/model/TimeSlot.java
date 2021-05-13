@@ -23,6 +23,7 @@ public class TimeSlot {
 
     private Time time;
 
+    @Column(name = "no_of_appointments")
     private Integer noOfAppointments;
 
     private Boolean full;
@@ -73,7 +74,7 @@ public class TimeSlot {
         return noOfAppointments;
     }
 
-    public void setNoOfAppointments(Integer noOfAppointments) {
+    public void setNoOfAppointments(int noOfAppointments) {
         this.noOfAppointments = noOfAppointments;
     }
 

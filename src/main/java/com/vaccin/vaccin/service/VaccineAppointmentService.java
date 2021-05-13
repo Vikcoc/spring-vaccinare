@@ -88,7 +88,6 @@ public class VaccineAppointmentService {
             timeSlot.setNoOfAppointments(1);
             timeSlot.setFull(false);
 
-
             // il pun in DB
             timeSlotRepository.save(timeSlot);
 
