@@ -1,6 +1,7 @@
 package com.vaccin.vaccin.model;
 
 import com.vaccin.vaccin.dto.TimeSlotCreateDto;
+import org.hibernate.annotations.JoinColumnOrFormula;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -17,6 +18,7 @@ public class TimeSlot {
     private Long id;
 
     @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "vaccine_center_id")
     private VaccineCenter vaccineCenter;
 
     private Date date;
@@ -28,7 +30,7 @@ public class TimeSlot {
 
     private Boolean full;
 
-    @OneToMany(fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "timeSlot",fetch=FetchType.LAZY)
     private List<VaccineAppointment> vaccineAppointments = new ArrayList<>();
 
     public TimeSlot() { }

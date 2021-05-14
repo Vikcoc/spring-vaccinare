@@ -17,8 +17,7 @@ public class User {
     private Long id;
 
     private String name;
-    // private Date birthDate;
-    private int age;
+    private Date birthDate;
     private String address;
     private String cnp;
 
@@ -39,10 +38,10 @@ public class User {
 
     public User(UserCreateDto userCreateDto){
         this.address = userCreateDto.getAddress();
-        //this.birthDate = userCreateDto.getBirthDate();
-        this.age = userCreateDto.getAge();
+        this.birthDate = Date.valueOf(userCreateDto.getBirthDate());
         this.email = userCreateDto.getEmail();
         this.name = userCreateDto.getName();
+        this.cnp = userCreateDto.getCnp();
     }
 
     public Long getId() {
@@ -61,21 +60,12 @@ public class User {
         this.name = name;
     }
 
-//    public Date getBirthDate() {
-//        return birthDate;
-//    }
-//
-//    public void setBirthDate(Date birthDate) {
-//        this.birthDate = birthDate;
-//    }
-
-
-    public int getAge() {
-        return age;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getAddress() {

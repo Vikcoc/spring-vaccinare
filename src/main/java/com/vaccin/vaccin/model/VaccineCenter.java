@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="centers")
+@Table(name="vaccine_centers")
 public class VaccineCenter {
 
     @Id
@@ -24,7 +24,7 @@ public class VaccineCenter {
     @ManyToOne(fetch = FetchType.LAZY)
     private VaccineType vaccineType;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "vaccineCenter", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     private List<TimeSlot> timeSlots = new ArrayList<>();
 
     public VaccineCenter() { }
