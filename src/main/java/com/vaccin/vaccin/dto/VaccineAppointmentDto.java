@@ -3,43 +3,79 @@ package com.vaccin.vaccin.dto;
 import com.vaccin.vaccin.model.TimeSlot;
 import com.vaccin.vaccin.model.User;
 import com.vaccin.vaccin.model.VaccineAppointment;
+import com.vaccin.vaccin.model.VaccineCenter;
 
 public class VaccineAppointmentDto {
 
-    private User patient;
+    private String date;
+    private String time;
+    private String vaccineCenterName;
+    private String vaccineCenterAddress;
+    private String vaccineTypeBrand;
+    private Boolean fulfilled;
 
-    private TimeSlot timeSlot;
-
-    private Boolean fullfiled;
 
 
     public VaccineAppointmentDto(VaccineAppointment vaccineAppointment) {
-        this.timeSlot = vaccineAppointment.getTimeSlot();
-        this.fullfiled = vaccineAppointment.getFulfilled();
+
+        TimeSlot timeSlot = vaccineAppointment.getTimeSlot();
+        this.date = timeSlot.getDate().toString();
+        this.time = timeSlot.getTime().toString();
+
+        VaccineCenter vaccineCenter = timeSlot.getVaccineCenter();
+        this.vaccineCenterName = vaccineCenter.getName();
+        this.vaccineCenterAddress = vaccineCenter.getAddress();
+        this.vaccineTypeBrand = vaccineCenter.getVaccineType().getBrand();
+
+        this.fulfilled = vaccineAppointment.getFulfilled();
     }
 
 
-    public TimeSlot getTimeSlot() {
-        return timeSlot;
+    public String getDate() {
+        return date;
     }
 
-    public void setTimeSlot(TimeSlot timeSlot) {
-        this.timeSlot = timeSlot;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public User getPatient() {
-        return patient;
+    public String getTime() {
+        return time;
     }
 
-    public void setPatient(User patient) {
-        this.patient = patient;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public Boolean getFullfiled() {
-        return fullfiled;
+    public String getVaccineCenterName() {
+        return vaccineCenterName;
     }
 
-    public void setFullfiled(Boolean fullfiled) {
-        this.fullfiled = fullfiled;
+    public void setVaccineCenterName(String vaccineCenterName) {
+        this.vaccineCenterName = vaccineCenterName;
+    }
+
+    public String getVaccineCenterAddress() {
+        return vaccineCenterAddress;
+    }
+
+    public void setVaccineCenterAddress(String vaccineCenterAddress) {
+        this.vaccineCenterAddress = vaccineCenterAddress;
+    }
+
+    public String getVaccineTypeBrand() {
+        return vaccineTypeBrand;
+    }
+
+    public void setVaccineTypeBrand(String vaccineTypeBrand) {
+        this.vaccineTypeBrand = vaccineTypeBrand;
+    }
+
+    public Boolean getFulfilled() {
+        return fulfilled;
+    }
+
+    public void setFulfilled(Boolean fulfilled) {
+        this.fulfilled = fulfilled;
     }
 }

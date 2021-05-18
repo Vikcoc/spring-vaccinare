@@ -1,6 +1,5 @@
 package com.vaccin.vaccin.dto;
 
-import java.sql.Date;
 
 public class UserCreateDto {
     private String email;

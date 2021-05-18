@@ -28,7 +28,6 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-
     public String createUser(UserCreateDto userCreateDto){
 
         Optional<AuthDto> userOptional = userRepository.getByEmailWithPasswordAndRole(userCreateDto.getEmail());
@@ -37,12 +36,20 @@ public class UserService {
             return "User with email already exists";
         }
 
-        var user = new User(userCreateDto);
+        User user;
+
+        try {
+            user = new User(userCreateDto);
+        } catch (IllegalArgumentException e) {
+            return "Date format incorrect";
+        }
+
         user.setPassword(BCrypt.hashpw(userCreateDto.getPassword(), BCrypt.gensalt()));
 
         Optional<Role> userRoleOptional = roleRepository.findByRole("ROLE_USER");
-
         userRoleOptional.ifPresent(user::setRole);
+
+        user.setAppointed(false);
 
         userRepository.save(user);
 

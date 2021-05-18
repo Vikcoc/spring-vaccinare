@@ -23,6 +23,7 @@ public class VaccineAppointment {
     @JoinColumn(name = "time_slot_id")
     private TimeSlot timeSlot;
 
+    @Column(columnDefinition = "boolean default false")
     private Boolean fulfilled;
 
     public VaccineAppointment() { }

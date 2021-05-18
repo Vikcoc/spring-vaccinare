@@ -18,6 +18,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class VaccineAppointmentService {
@@ -39,87 +40,80 @@ public class VaccineAppointmentService {
 
     public String addAppointment(VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
 
-        // creez un VaccineAppointment
-        VaccineAppointment vaccineAppointment = new VaccineAppointment(vaccineAppointmentCreateDto);
-
-        // caut Userul cu id-ul primit
-        Long patientId = vaccineAppointmentCreateDto.getPatientId();
-        Optional<User> patientOptional = userRepository.findById(patientId);
-
+        Optional<User> patientOptional = userRepository.findById(vaccineAppointmentCreateDto.getPatientId());
+        Optional<VaccineCenter> vaccineCenterOptional = vaccineCenterRepository.findById(vaccineAppointmentCreateDto.getVaccineCenterId());
         if (patientOptional.isEmpty()) {
             return "User not found";
         }
-
-        // setez Userul pentru appointment
-        vaccineAppointment.setPatient(patientOptional.get());
-
-        // scot Date, Time si vaccineCenterId din CreateDto
-        String rawDate = vaccineAppointmentCreateDto.getDate();
-        String rawTime= vaccineAppointmentCreateDto.getTime();
-        Date date = Date.valueOf(rawDate);
-        Time time = Time.valueOf(rawTime);
-        Long vaccineCenterId = vaccineAppointmentCreateDto.getVaccineCenterId();
-
-
-        // caut daca exista VaccineCenter cu id-ul corespunzator
-        Optional<VaccineCenter> vaccineCenterOptional = vaccineCenterRepository.findById(vaccineCenterId);
-
         if (vaccineCenterOptional.isEmpty()) {
-            return "VaccineCenter not found";
+            return "Vaccine Center doesn't exist";
         }
 
+        User patient = patientOptional.get();
         VaccineCenter vaccineCenter = vaccineCenterOptional.get();
 
-        // caut daca exista un TimeSlot cu date, time si centerId corespunzatoare
-        List<TimeSlot> timeSlots = timeSlotRepository.findByDateTimeCenter(date, time, vaccineCenterId);
+        Date date = Date.valueOf(vaccineAppointmentCreateDto.getDate());
+        Time time = Time.valueOf(vaccineAppointmentCreateDto.getTime());
 
-        if (timeSlots.size() > 1) {
-            // problema
-            return "Database error";
-        }
+        List<TimeSlot> timeSlots = timeSlotRepository.findByDateTimeCenter(date, time, vaccineCenter.getId());
 
+        TimeSlot timeSlot = new TimeSlot();
+        String method;
         if (timeSlots.isEmpty()) {
-
-            // daca nu exista, atunci creez un timeslot la acel centru la acea ora
-            TimeSlot timeSlot = new TimeSlot();
-            timeSlot.setDate(date);
-            timeSlot.setTime(time);
-            timeSlot.setVaccineCenter(vaccineCenter);
-            timeSlot.setNoOfAppointments(1);
-            timeSlot.setFull(false);
-
-            // il pun in DB
-            timeSlotRepository.save(timeSlot);
-
-            // setez TimeSlot-ul nou creat pentru VaccineAppointment
-            vaccineAppointment.setTimeSlot(timeSlot);
-
-            vaccineAppointmentRepository.save(vaccineAppointment);
-
-            return "Added VaccineAppointment (new slot)";
-        }
-        // daca totusi exista deja TimeSlot-ul
-        TimeSlot timeSlot = timeSlots.get(0);
-
-        // daca e full
-        if (timeSlot.getFull()) {
-            return "TimeSlot full";
+            timeSlot = createTimeSlot(date, time, vaccineCenter);
+            method = "new timeslot";
+        } else {
+            timeSlot = timeSlots.get(0);
+            long id = timeSlot.getId();
+            int noOfAppointments = timeSlot.getNoOfAppointments() + 1;
+            boolean full = noOfAppointments > 5;
+            timeSlotRepository.updateAppointmentsAndFullById(id, noOfAppointments, full);
+            method = "existing timeslot";
         }
 
-        // updatam TimeSlot-ul in baza de date
-        long id = timeSlot.getId();
-        int noOfAppointments = timeSlot.getNoOfAppointments() + 1;
-        boolean full = noOfAppointments > 5;
-        timeSlotRepository.updateAppointmentsAndFullById(id, noOfAppointments, full);
-
-        // setam TimeSlot-ul pentru VaccineAppointment-ul meu
+        VaccineAppointment vaccineAppointment = new VaccineAppointment(vaccineAppointmentCreateDto);
         vaccineAppointment.setTimeSlot(timeSlot);
-
-        // il setam ca nefiind finalizat
         vaccineAppointment.setFulfilled(false);
-
+        vaccineAppointment.setPatient(patient);
         vaccineAppointmentRepository.save(vaccineAppointment);
 
-        return "Added VaccineAppointment (slot already exists)";
+        patient.setAppointed(true);
+        userRepository.save(patient);
+
+        return "Ok - " + method;
+    }
+
+    public TimeSlot createTimeSlot(Date date, Time time, VaccineCenter vaccineCenter) {
+
+        TimeSlot newTimeSlot = new TimeSlot();
+        newTimeSlot.setDate(date);
+        newTimeSlot.setTime(time);
+        newTimeSlot.setVaccineCenter(vaccineCenter);
+        newTimeSlot.setNoOfAppointments(1);
+        newTimeSlot.setFull(false);
+
+        timeSlotRepository.save(newTimeSlot);
+
+        return newTimeSlot;
+    }
+
+    public List<VaccineAppointmentDto> getAppointments(long patientId) {
+
+        Optional<User> patientOptional = userRepository.findById(patientId);
+
+        if (patientOptional.isEmpty()) {
+            return null;
+        }
+
+        User patient = patientOptional.get();
+
+        List<VaccineAppointment> vaccineAppointments = vaccineAppointmentRepository.findByPatient(patient);
+        List<VaccineAppointmentDto> vaccineAppointmentDtos
+                = vaccineAppointments
+                .stream()
+                .map(VaccineAppointmentDto::new)
+                .collect(Collectors.toList());
+
+        return vaccineAppointmentDtos;
     }
 }
