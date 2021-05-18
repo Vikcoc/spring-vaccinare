@@ -22,7 +22,7 @@ public class VaccineAppointmentController {
     @PostMapping("/appointments/add")
     public String addAppointment(@RequestBody VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
 
-        return vaccineAppointmentService.addAppointment(vaccineAppointmentCreateDto);
+        return vaccineAppointmentService.appointUser(vaccineAppointmentCreateDto);
 
     }
 

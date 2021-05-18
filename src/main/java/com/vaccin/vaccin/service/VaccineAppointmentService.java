@@ -1,6 +1,5 @@
 package com.vaccin.vaccin.service;
 
-import com.vaccin.vaccin.dto.TimeSlotCreateDto;
 import com.vaccin.vaccin.dto.VaccineAppointmentCreateDto;
 import com.vaccin.vaccin.dto.VaccineAppointmentDto;
 import com.vaccin.vaccin.model.TimeSlot;
@@ -11,11 +10,16 @@ import com.vaccin.vaccin.repository.TimeSlotRepository;
 import com.vaccin.vaccin.repository.UserRepository;
 import com.vaccin.vaccin.repository.VaccineAppointmentRepository;
 import com.vaccin.vaccin.repository.VaccineCenterRepository;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,22 +42,8 @@ public class VaccineAppointmentService {
         this.vaccineCenterRepository = vaccineCenterRepository;
     }
 
-    public String addAppointment(VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
-
-        Optional<User> patientOptional = userRepository.findById(vaccineAppointmentCreateDto.getPatientId());
-        Optional<VaccineCenter> vaccineCenterOptional = vaccineCenterRepository.findById(vaccineAppointmentCreateDto.getVaccineCenterId());
-        if (patientOptional.isEmpty()) {
-            return "User not found";
-        }
-        if (vaccineCenterOptional.isEmpty()) {
-            return "Vaccine Center doesn't exist";
-        }
-
-        User patient = patientOptional.get();
-        VaccineCenter vaccineCenter = vaccineCenterOptional.get();
-
-        Date date = Date.valueOf(vaccineAppointmentCreateDto.getDate());
-        Time time = Time.valueOf(vaccineAppointmentCreateDto.getTime());
+    public String addAppointment(User patient, VaccineCenter vaccineCenter,
+                                 Date date, Time time) {
 
         List<TimeSlot> timeSlots = timeSlotRepository.findByDateTimeCenter(date, time, vaccineCenter.getId());
 
@@ -71,7 +61,7 @@ public class VaccineAppointmentService {
             method = "existing timeslot";
         }
 
-        VaccineAppointment vaccineAppointment = new VaccineAppointment(vaccineAppointmentCreateDto);
+        VaccineAppointment vaccineAppointment = new VaccineAppointment();
         vaccineAppointment.setTimeSlot(timeSlot);
         vaccineAppointment.setFulfilled(false);
         vaccineAppointment.setPatient(patient);
@@ -80,7 +70,58 @@ public class VaccineAppointmentService {
         patient.setAppointed(true);
         userRepository.save(patient);
 
-        return "Ok - " + method;
+        return method;
+    }
+
+
+    public String appointUser(VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
+
+        Optional<User> patientOptional = userRepository.findById(vaccineAppointmentCreateDto.getPatientId());
+        Optional<VaccineCenter> vaccineCenterOptional = vaccineCenterRepository.findById(vaccineAppointmentCreateDto.getVaccineCenterId());
+        if (patientOptional.isEmpty()) {
+            return "User not found";
+        }
+        if (vaccineCenterOptional.isEmpty()) {
+            return "Vaccine Center doesn't exist";
+        }
+
+        User patient = patientOptional.get();
+        VaccineCenter vaccineCenter = vaccineCenterOptional.get();
+
+        if (vaccineAppointmentRepository.findByPatient(patient).size() > 0 || patient.getAppointed()) {
+            return "User already appointed";
+        }
+
+
+        Date initialDate = Date.valueOf(vaccineAppointmentCreateDto.getDate());
+        Date boosterDate = addDays(initialDate, vaccineCenter.getVaccineType().getDaysBetweenShots());
+        Time time = Time.valueOf(vaccineAppointmentCreateDto.getTime());
+
+        return addAppointment(patient, vaccineCenter, initialDate, time)
+                + " "
+                + addAppointment(patient, vaccineCenter, boosterDate, time);
+
+    }
+
+    public Date addDays(Date date, int noOfDays) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate localDate = LocalDate.parse(date.toString(), formatter)
+                .plusDays(noOfDays);
+
+        return Date.valueOf(localDate);
+
+    }
+
+    public boolean isTimeSlotAvailable(Date date, Time time, VaccineCenter vaccineCenter) {
+
+        List<TimeSlot> list = timeSlotRepository.findByDateTimeCenter(date, time, vaccineCenter.getId());
+
+        if (list.isEmpty()) {
+            return true;
+        }
+        return list.get(0).getNoOfAppointments() <= 5;
     }
 
     public TimeSlot createTimeSlot(Date date, Time time, VaccineCenter vaccineCenter) {
