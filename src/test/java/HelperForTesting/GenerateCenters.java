@@ -9,7 +9,7 @@ import java.util.List;
 public class GenerateCenters {
 
     static public List<VaccineCenter> getCenters(Long startId, Integer count){
-        var res = new ArrayList();
+        List<VaccineCenter> res = new ArrayList<>();
         for(int i = 1; i <= count; i++){
             VaccineCenter vc = new VaccineCenter();
             vc.setId(startId + i);
@@ -27,7 +27,7 @@ public class GenerateCenters {
     }
 
     static public List<VaccineType> getTypes(Long startId, Integer count){
-        var res = new ArrayList();
+        List<VaccineType> res = new ArrayList<>();
         for(int i = 1; i <= count; i++){
 
             VaccineType vt = new VaccineType();

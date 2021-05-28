@@ -45,60 +45,60 @@ public class VaccinApplicationTests {
 
 	@Test
 	public void getCentersAroundCoords_GetsByRightCoords() {
-		var service = new VaccineCenterService(vaccineCenterRepository, vaccineTypeRepository);
+		VaccineCenterService service = new VaccineCenterService(vaccineCenterRepository, vaccineTypeRepository);
 		assert !service.getCentersAroundCoords(0.1D,0.1D).isEmpty() : "List is empty";
 	}
 
 	@Test
 	public void getCentersAroundCoords_DoesntGetByWrong() {
-		var service = new VaccineCenterService(vaccineCenterRepository, vaccineTypeRepository);
+		VaccineCenterService service = new VaccineCenterService(vaccineCenterRepository, vaccineTypeRepository);
 		assert service.getCentersAroundCoords(1D,1D).isEmpty() : "List is not empty";
 	}
 
 	@Test
 	public void addCenter_GivesAffirmativeAnswer(){
-		var service = new VaccineCenterService(vaccineCenterRepository, vaccineTypeRepository);
-		VaccineCenterCreateDto val = new VaccineCenterCreateDto();
-		val.setAddress("Some address");
-		val.setLatitude(0D);
-		val.setLongitude(0D);
-		val.setVaccineTypeId(1);
-		val.setName("Some type");
-		val.setDosesAvailable(400);
+		VaccineCenterService service = new VaccineCenterService(vaccineCenterRepository, vaccineTypeRepository);
+		VaccineCenterCreateDto centerDto = new VaccineCenterCreateDto();
+		centerDto.setAddress("Some address");
+		centerDto.setLatitude(0D);
+		centerDto.setLongitude(0D);
+		centerDto.setVaccineTypeId(1);
+		centerDto.setName("Some type");
+		centerDto.setDosesAvailable(400);
 
-		var res = service.addCenter(val);
+		String res = service.addCenter(centerDto);
 
 		assert res == "Vaccine Center added";
 	}
 
 	@Test
 	public void addCenter_GivesNegativeAnswer(){
-		var service = new VaccineCenterService(vaccineCenterRepository, vaccineTypeRepository);
-		VaccineCenterCreateDto val = new VaccineCenterCreateDto();
-		val.setAddress("Some address");
-		val.setLatitude(0D);
-		val.setLongitude(0D);
-		val.setVaccineTypeId(0);
-		val.setName("Some type");
-		val.setDosesAvailable(400);
+		VaccineCenterService service = new VaccineCenterService(vaccineCenterRepository, vaccineTypeRepository);
+		VaccineCenterCreateDto centerDto = new VaccineCenterCreateDto();
+		centerDto.setAddress("Some address");
+		centerDto.setLatitude(0D);
+		centerDto.setLongitude(0D);
+		centerDto.setVaccineTypeId(0);
+		centerDto.setName("Some type");
+		centerDto.setDosesAvailable(400);
 
-		var res = service.addCenter(val);
+		String res = service.addCenter(centerDto);
 
 		assert res == "Vaccine Type not found";
 	}
 
 	@Test
 	public void addCenter_SavesToRepo(){
-		var service = new VaccineCenterService(vaccineCenterRepository, vaccineTypeRepository);
-		VaccineCenterCreateDto val = new VaccineCenterCreateDto();
-		val.setAddress("Some address");
-		val.setLatitude(0D);
-		val.setLongitude(0D);
-		val.setVaccineTypeId(1);
-		val.setName("Some type");
-		val.setDosesAvailable(400);
+		VaccineCenterService service = new VaccineCenterService(vaccineCenterRepository, vaccineTypeRepository);
+		VaccineCenterCreateDto centerDto = new VaccineCenterCreateDto();
+		centerDto.setAddress("Some address");
+		centerDto.setLatitude(0D);
+		centerDto.setLongitude(0D);
+		centerDto.setVaccineTypeId(1);
+		centerDto.setName("Some type");
+		centerDto.setDosesAvailable(400);
 
-		service.addCenter(val);
+		service.addCenter(centerDto);
 
 		verify(vaccineCenterRepository).save(ArgumentMatchers.any());
 	}
