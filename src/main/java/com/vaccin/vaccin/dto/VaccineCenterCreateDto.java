@@ -37,5 +37,28 @@ public class VaccineCenterCreateDto {
     public long getDosesAvailable() {
         return dosesAvailable;
     }
-    
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setVaccineTypeId(long vaccineTypeId) {
+        this.vaccineTypeId = vaccineTypeId;
+    }
+
+    public void setDosesAvailable(long dosesAvailable) {
+        this.dosesAvailable = dosesAvailable;
+    }
 }
