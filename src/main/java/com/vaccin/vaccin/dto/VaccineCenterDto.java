@@ -22,6 +22,7 @@ public class VaccineCenterDto {
         this.latitude = vaccineCenter.getLatitude();
         this.longitude = vaccineCenter.getLongitude();
         this.vaccineTypeBrand = vaccineCenter.getVaccineType().getBrand();
+        this.dosesAvailable = vaccineCenter.getDosesAvailable();
     }
 
 

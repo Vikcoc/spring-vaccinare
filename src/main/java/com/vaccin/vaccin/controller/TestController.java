@@ -35,11 +35,6 @@ public class TestController {
         return BCrypt.hashpw(pass, BCrypt.gensalt());
     }
 
-    @PostMapping("/user")
-    public String postUser(@RequestBody UserCreateDto userCreateDto){
-        return userService.createUser(userCreateDto);
-    }
-
     @GetMapping("/users")
     public List<UserDto> getDoctors(){
         return userService.getDoctors();

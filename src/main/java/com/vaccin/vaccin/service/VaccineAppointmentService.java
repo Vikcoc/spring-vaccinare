@@ -92,7 +92,6 @@ public class VaccineAppointmentService {
             return "User already appointed";
         }
 
-
         Date initialDate = Date.valueOf(vaccineAppointmentCreateDto.getDate());
         Date boosterDate = addDays(initialDate, vaccineCenter.getVaccineType().getDaysBetweenShots());
         Time time = Time.valueOf(vaccineAppointmentCreateDto.getTime());
