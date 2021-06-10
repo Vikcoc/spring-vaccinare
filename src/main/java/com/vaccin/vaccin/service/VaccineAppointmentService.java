@@ -75,7 +75,7 @@ public class VaccineAppointmentService {
 
         if (timeSlots.size() > 1) {
             // problema
-            return "";
+            return "Database error";
         }
 
         if (timeSlots.isEmpty()) {
@@ -85,8 +85,8 @@ public class VaccineAppointmentService {
             timeSlot.setDate(date);
             timeSlot.setTime(time);
             timeSlot.setVaccineCenter(vaccineCenter);
+            timeSlot.setNoOfAppointments(1);
             timeSlot.setFull(false);
-
 
             // il pun in DB
             timeSlotRepository.save(timeSlot);
@@ -101,8 +101,21 @@ public class VaccineAppointmentService {
         // daca totusi exista deja TimeSlot-ul
         TimeSlot timeSlot = timeSlots.get(0);
 
+        // daca e full
+        if (timeSlot.getFull()) {
+            return "TimeSlot full";
+        }
+
+        // updatam TimeSlot-ul in baza de date
+        long id = timeSlot.getId();
+        int noOfAppointments = timeSlot.getNoOfAppointments() + 1;
+        boolean full = noOfAppointments > 5;
+        timeSlotRepository.updateAppointmentsAndFullById(id, noOfAppointments, full);
+
+        // setam TimeSlot-ul pentru VaccineAppointment-ul meu
         vaccineAppointment.setTimeSlot(timeSlot);
 
+        // il setam ca nefiind finalizat
         vaccineAppointment.setFulfilled(false);
 
         vaccineAppointmentRepository.save(vaccineAppointment);
