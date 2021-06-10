@@ -6,7 +6,7 @@ import com.vaccin.vaccin.dto.VaccineAppointmentDto;
 import javax.persistence.*;
 
 @Entity
-@Table(name="appointments")
+@Table(name="vaccine_appointments")
 public class VaccineAppointment {
 
     @Id
@@ -20,8 +20,10 @@ public class VaccineAppointment {
     private Doctor doctor;
 
     @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "time_slot_id")
     private TimeSlot timeSlot;
 
+    @Column(columnDefinition = "boolean default false")
     private Boolean fulfilled;
 
     public VaccineAppointment() { }

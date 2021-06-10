@@ -1,8 +1,5 @@
 package com.vaccin.vaccin.dto;
 
-import java.sql.Date;
-import java.sql.Time;
-
 public class VaccineAppointmentCreateDto {
 
     private Long patientId;

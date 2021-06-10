@@ -41,13 +41,13 @@ public class VaccinApplication  implements CommandLineRunner {
 
 		User admin = new User();
 		admin.setEmail("admin@vacc.ro");
-		admin.setAge(400);
+		admin.setBirthDate(Date.valueOf("2000-06-12"));
 		admin.setAddress("Palatul Cotroceni");
 		admin.setName("Admin");
 		admin.setPassword(BCrypt.hashpw("Abcd_1234", BCrypt.gensalt()));
+		admin.setCnp("0000000000000");
 		admin.setRole(roleAdmin);
 
 		userRepository.save(admin);
-
 	}
 }

@@ -17,10 +17,12 @@ public class User {
     private Long id;
 
     private String name;
-    // private Date birthDate;
-    private int age;
+    private Date birthDate;
     private String address;
     private String cnp;
+
+    @Column(columnDefinition = "boolean default false")
+    private Boolean isAppointed;
 
     private String email;
     private String password;
@@ -37,12 +39,12 @@ public class User {
 
     public User() { }
 
-    public User(UserCreateDto userCreateDto){
-        this.address = userCreateDto.getAddress();
-        //this.birthDate = userCreateDto.getBirthDate();
-        this.age = userCreateDto.getAge();
+    public User(UserCreateDto userCreateDto) throws IllegalArgumentException {
         this.email = userCreateDto.getEmail();
         this.name = userCreateDto.getName();
+        this.birthDate = Date.valueOf(userCreateDto.getBirthDate());
+        this.address = userCreateDto.getAddress();
+        this.cnp = userCreateDto.getCnp();
     }
 
     public Long getId() {
@@ -61,21 +63,12 @@ public class User {
         this.name = name;
     }
 
-//    public Date getBirthDate() {
-//        return birthDate;
-//    }
-//
-//    public void setBirthDate(Date birthDate) {
-//        this.birthDate = birthDate;
-//    }
-
-
-    public int getAge() {
-        return age;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getAddress() {
@@ -88,6 +81,14 @@ public class User {
 
     public void setCnp(String cnp) {
         this.cnp = cnp;
+    }
+
+    public Boolean getAppointed() {
+        return isAppointed;
+    }
+
+    public void setAppointed(Boolean appointed) {
+        isAppointed = appointed;
     }
 
     public void setAddress(String address) {
