@@ -25,23 +25,34 @@ public class VaccineAppointmentController {
     }
 
     @PostMapping("/appointments/add")
-    public ResponseEntity addAppointment(@RequestBody VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
+    public ResponseEntity<List<VaccineAppointmentDto>> addAppointment
+            (@RequestBody VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
 
-        if (vaccineAppointmentService.appointUser(vaccineAppointmentCreateDto) != null) {
-            return new ResponseEntity(HttpStatus.CREATED);
+        try {
+            List<VaccineAppointmentDto> vaccineAppointmentDtoList =
+                vaccineAppointmentService.appointUser(vaccineAppointmentCreateDto);
+            return new ResponseEntity<>(vaccineAppointmentDtoList, HttpStatus.CREATED);
+        } catch (Exception exception) {
+            if (exception.getMessage().equals("User not found")
+                    || exception.getMessage().equals("Vaccine Center not found")) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
         }
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/appointments/{patientId}")
     public ResponseEntity<List<VaccineAppointmentDto>> getAppointments(@PathVariable long patientId) {
 
-        List<VaccineAppointmentDto> appointments = vaccineAppointmentService.getAppointments(patientId);
-        if (appointments == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else if (appointments.isEmpty()) {
-            return new ResponseEntity<>(appointments, HttpStatus.NO_CONTENT);
+        try {
+            List<VaccineAppointmentDto> appointments = vaccineAppointmentService.getAppointments(patientId);
+            if (appointments.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(appointments, HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 }

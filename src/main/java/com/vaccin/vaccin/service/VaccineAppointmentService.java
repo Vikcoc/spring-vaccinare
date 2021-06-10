@@ -20,6 +20,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,64 +43,65 @@ public class VaccineAppointmentService {
         this.vaccineCenterRepository = vaccineCenterRepository;
     }
 
-    public String addAppointment(User patient, VaccineCenter vaccineCenter,
+    public VaccineAppointmentDto addAppointment(User patient, VaccineCenter vaccineCenter,
                                  Date date, Time time) {
 
         List<TimeSlot> timeSlots = timeSlotRepository.findByDateTimeCenter(date, time, vaccineCenter.getId());
 
-        TimeSlot timeSlot = new TimeSlot();
-        String method;
+        TimeSlot timeSlot;
         if (timeSlots.isEmpty()) {
             timeSlot = createTimeSlot(date, time, vaccineCenter);
-            method = "new timeslot";
         } else {
             timeSlot = timeSlots.get(0);
             long id = timeSlot.getId();
             int noOfAppointments = timeSlot.getNoOfAppointments() + 1;
             boolean full = noOfAppointments > 5;
             timeSlotRepository.updateAppointmentsAndFullById(id, noOfAppointments, full);
-            method = "existing timeslot";
         }
 
         VaccineAppointment vaccineAppointment = new VaccineAppointment();
         vaccineAppointment.setTimeSlot(timeSlot);
         vaccineAppointment.setFulfilled(false);
         vaccineAppointment.setPatient(patient);
-        vaccineAppointmentRepository.save(vaccineAppointment);
+        VaccineAppointmentDto vaccineAppointmentDto
+                = new VaccineAppointmentDto(vaccineAppointmentRepository.save(vaccineAppointment));
 
         patient.setAppointed(true);
         userRepository.save(patient);
 
-        return method;
+        return vaccineAppointmentDto;
     }
 
 
-    public String appointUser(VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
+    public List<VaccineAppointmentDto> appointUser(VaccineAppointmentCreateDto vaccineAppointmentCreateDto) throws Exception {
 
         Optional<User> patientOptional = userRepository.findById(vaccineAppointmentCreateDto.getPatientId());
         Optional<VaccineCenter> vaccineCenterOptional = vaccineCenterRepository.findById(vaccineAppointmentCreateDto.getVaccineCenterId());
         if (patientOptional.isEmpty()) {
-            return "User not found";
+            throw new Exception("User not found");
         }
         if (vaccineCenterOptional.isEmpty()) {
-            return "Vaccine Center doesn't exist";
+            throw new Exception("Vaccine Center not found");
         }
 
         User patient = patientOptional.get();
         VaccineCenter vaccineCenter = vaccineCenterOptional.get();
 
         if (vaccineAppointmentRepository.findByPatient(patient).size() > 0 || patient.getAppointed()) {
-            return "User already appointed";
+            throw new Exception("User already appointed");
         }
 
         Date initialDate = Date.valueOf(vaccineAppointmentCreateDto.getDate());
         Date boosterDate = addDays(initialDate, vaccineCenter.getVaccineType().getDaysBetweenShots());
         Time time = Time.valueOf(vaccineAppointmentCreateDto.getTime());
 
-        return addAppointment(patient, vaccineCenter, initialDate, time)
-                + " "
-                + addAppointment(patient, vaccineCenter, boosterDate, time);
+        List<VaccineAppointmentDto> vaccineAppointmentDtoList = new ArrayList<>();
 
+
+        vaccineAppointmentDtoList.add(addAppointment(patient, vaccineCenter, initialDate, time));
+        vaccineAppointmentDtoList.add(addAppointment(patient, vaccineCenter, boosterDate, time));
+
+        return vaccineAppointmentDtoList;
     }
 
     public Date addDays(Date date, int noOfDays) {
@@ -137,12 +139,11 @@ public class VaccineAppointmentService {
         return newTimeSlot;
     }
 
-    public List<VaccineAppointmentDto> getAppointments(long patientId) {
+    public List<VaccineAppointmentDto> getAppointments(long patientId) throws Exception {
 
         Optional<User> patientOptional = userRepository.findById(patientId);
-
         if (patientOptional.isEmpty()) {
-            return null;
+            throw new Exception("Userul nu exista");
         }
 
         User patient = patientOptional.get();
