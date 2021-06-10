@@ -2,16 +2,12 @@ package com.vaccin.vaccin.controller;
 
 import com.vaccin.vaccin.dto.VaccineAppointmentCreateDto;
 import com.vaccin.vaccin.dto.VaccineAppointmentDto;
-import com.vaccin.vaccin.model.VaccineAppointment;
 import com.vaccin.vaccin.service.VaccineAppointmentService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpResponse;
 import java.util.List;
 
 @RestController
