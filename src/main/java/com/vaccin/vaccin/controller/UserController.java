@@ -2,6 +2,8 @@ package com.vaccin.vaccin.controller;
 
 import com.vaccin.vaccin.dto.UserCreateDto;
 import com.vaccin.vaccin.dto.UserDto;
+import com.vaccin.vaccin.exception.UserCreateException;
+import com.vaccin.vaccin.exception.UserGetException;
 import com.vaccin.vaccin.exception.UserUpdateException;
 import com.vaccin.vaccin.service.UserService;
 import org.apache.coyote.Response;
@@ -26,8 +28,18 @@ public class UserController {
         try {
             UserDto userDto = userService.createUser(userCreateDto);
             return new ResponseEntity<>(userDto, HttpStatus.CREATED);
-        } catch (Exception exception) {
+        } catch (UserCreateException exception) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/users/get/{userId}")
+    public ResponseEntity<UserDto> retrieveUser(@PathVariable Long userId) {
+        try {
+            UserDto userDto = userService.getUser(userId);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        } catch (UserGetException exception) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
