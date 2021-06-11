@@ -32,11 +32,9 @@ public class VaccineTypeService {
         return vaccineTypeDtoList;
     }
 
-    public String addType(VaccineTypeCreateDto vaccineTypeCreateDto) {
+    public VaccineTypeDto addType(VaccineTypeCreateDto vaccineTypeCreateDto) {
         VaccineType vaccineType = new VaccineType(vaccineTypeCreateDto);
 
-        vaccineTypeRepository.save(vaccineType);
-
-        return "Added VaccineType";
+        return new VaccineTypeDto(vaccineTypeRepository.save(vaccineType));
     }
 }

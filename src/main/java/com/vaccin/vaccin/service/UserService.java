@@ -28,12 +28,12 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public String createUser(UserCreateDto userCreateDto){
+    public UserDto createUser(UserCreateDto userCreateDto) throws Exception {
 
         Optional<AuthDto> userOptional = userRepository.getByEmailWithPasswordAndRole(userCreateDto.getEmail());
 
         if (userOptional.isPresent()) {
-            return "User with email already exists";
+            throw new Exception("User with email already exists");
         }
 
         User user;
@@ -41,7 +41,7 @@ public class UserService {
         try {
             user = new User(userCreateDto);
         } catch (IllegalArgumentException e) {
-            return "Date format incorrect";
+            throw new Exception("Date format incorrect");
         }
 
         user.setPassword(BCrypt.hashpw(userCreateDto.getPassword(), BCrypt.gensalt()));
@@ -51,9 +51,8 @@ public class UserService {
 
         user.setAppointed(false);
 
-        userRepository.save(user);
+        return new UserDto(userRepository.save(user));
 
-        return "Added user";
     }
 
     public List<UserDto> getDoctors(){

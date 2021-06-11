@@ -30,7 +30,7 @@ public class TimeSlot {
 
     private Boolean full;
 
-    @OneToMany(mappedBy = "timeSlot",fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "timeSlot",fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     private List<VaccineAppointment> vaccineAppointments = new ArrayList<>();
 
     public TimeSlot() { }

@@ -1,10 +1,8 @@
 package com.vaccin.vaccin.model;
 
 import com.vaccin.vaccin.dto.VaccineTypeCreateDto;
-import com.vaccin.vaccin.dto.VaccineTypeDto;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,6 +13,7 @@ public class VaccineType {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String brand;
 
     private int daysBetweenShots;

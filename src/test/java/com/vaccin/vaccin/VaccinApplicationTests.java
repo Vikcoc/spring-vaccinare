@@ -2,6 +2,7 @@ package com.vaccin.vaccin;
 
 import HelperForTesting.GenerateCenters;
 import com.vaccin.vaccin.dto.VaccineCenterCreateDto;
+import com.vaccin.vaccin.dto.VaccineCenterDto;
 import com.vaccin.vaccin.model.VaccineType;
 import com.vaccin.vaccin.repository.VaccineCenterRepository;
 import com.vaccin.vaccin.repository.VaccineTypeRepository;
@@ -66,13 +67,23 @@ public class VaccinApplicationTests {
 		centerDto.setName("Some type");
 		centerDto.setDosesAvailable(400);
 
-		String res = service.addCenter(centerDto);
+		VaccineCenterDto res = new VaccineCenterDto();
+		try {
+			 res = service.addCenter(centerDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		assert res == "Vaccine Center added";
+		assert res.getName().equals("Some type")
+				&& res.getLatitude() == 0D
+				&& res.getLongitude() == 0D
+				&& res.getAddress().equals("Some address")
+				&& res.getDosesAvailable() == 400;
+
 	}
 
-	@Test
-	public void addCenter_GivesNegativeAnswer(){
+	@Test(expected = Exception.class)
+	public void addCenter_GivesNegativeAnswer() throws Exception {
 		VaccineCenterService service = new VaccineCenterService(vaccineCenterRepository, vaccineTypeRepository);
 		VaccineCenterCreateDto centerDto = new VaccineCenterCreateDto();
 		centerDto.setAddress("Some address");
@@ -82,9 +93,7 @@ public class VaccinApplicationTests {
 		centerDto.setName("Some type");
 		centerDto.setDosesAvailable(400);
 
-		String res = service.addCenter(centerDto);
-
-		assert res == "Vaccine Type not found";
+		service.addCenter(centerDto);
 	}
 
 	@Test
@@ -98,8 +107,11 @@ public class VaccinApplicationTests {
 		centerDto.setName("Some type");
 		centerDto.setDosesAvailable(400);
 
-		service.addCenter(centerDto);
-
+		try {
+			service.addCenter(centerDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		verify(vaccineCenterRepository).save(ArgumentMatchers.any());
 	}
 

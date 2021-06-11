@@ -19,11 +19,13 @@ public class User {
     private String name;
     private Date birthDate;
     private String address;
+    @Column(unique = true)
     private String cnp;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean isAppointed;
 
+    @Column(unique = true)
     private String email;
     private String password;
 

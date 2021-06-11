@@ -15,6 +15,7 @@ public class VaccineCenter {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String name;
     private String address;
     private Double latitude;
