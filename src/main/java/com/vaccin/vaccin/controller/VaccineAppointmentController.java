@@ -41,9 +41,6 @@ public class VaccineAppointmentController {
 
         try {
             List<VaccineAppointmentDto> appointments = vaccineAppointmentService.getAppointments(patientId);
-            if (appointments.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
             return new ResponseEntity<>(appointments, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

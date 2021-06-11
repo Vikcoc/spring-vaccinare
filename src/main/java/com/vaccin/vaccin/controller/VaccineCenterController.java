@@ -29,8 +29,6 @@ public class VaccineCenterController {
 
         if (vaccineCenters == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else if (vaccineCenters.isEmpty()) {
-            return new ResponseEntity<>(vaccineCenters, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(vaccineCenters, HttpStatus.OK);
     }
