@@ -3,6 +3,7 @@ package com.vaccin.vaccin.service;
 import com.vaccin.vaccin.dto.AuthDto;
 import com.vaccin.vaccin.dto.UserCreateDto;
 import com.vaccin.vaccin.dto.UserDto;
+import com.vaccin.vaccin.exception.UserUpdateException;
 import com.vaccin.vaccin.model.Role;
 import com.vaccin.vaccin.model.User;
 import com.vaccin.vaccin.repository.RoleRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,7 +39,6 @@ public class UserService {
         }
 
         User user;
-
         try {
             user = new User(userCreateDto);
         } catch (IllegalArgumentException e) {
@@ -53,6 +54,27 @@ public class UserService {
 
         return new UserDto(userRepository.save(user));
 
+    }
+
+    public UserDto updateUser(Long userId, UserCreateDto userCreateDto) throws UserUpdateException {
+
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            throw new UserUpdateException("User not found");
+        }
+
+        User user = userOptional.get();
+        user.setName(userCreateDto.getName());
+        user.setEmail(userCreateDto.getEmail());
+        try {
+            user.setBirthDate(Date.valueOf(userCreateDto.getBirthDate()));
+        } catch (IllegalArgumentException exception) {
+            throw new UserUpdateException("BirthDate value incorret");
+        }
+        user.setAddress(userCreateDto.getAddress());
+        user.setCnp(userCreateDto.getCnp());
+
+        return new UserDto(userRepository.save(user));
     }
 
     public List<UserDto> getDoctors(){

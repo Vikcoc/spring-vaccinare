@@ -2,15 +2,13 @@ package com.vaccin.vaccin.controller;
 
 import com.vaccin.vaccin.dto.UserCreateDto;
 import com.vaccin.vaccin.dto.UserDto;
+import com.vaccin.vaccin.exception.UserUpdateException;
 import com.vaccin.vaccin.service.UserService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -29,6 +27,17 @@ public class UserController {
             UserDto userDto = userService.createUser(userCreateDto);
             return new ResponseEntity<>(userDto, HttpStatus.CREATED);
         } catch (Exception exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/users/edit/{userId}")
+    public ResponseEntity<UserDto> editUser(@PathVariable Long userId, @RequestBody UserCreateDto userCreateDto) {
+
+        try {
+            UserDto userDto = userService.updateUser(userId, userCreateDto);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        } catch (UserUpdateException exception) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
