@@ -2,14 +2,17 @@ package com.vaccin.vaccin.controller;
 
 import com.vaccin.vaccin.dto.VaccineAppointmentCreateDto;
 import com.vaccin.vaccin.dto.VaccineAppointmentDto;
+import com.vaccin.vaccin.exception.AppointmentCreateException;
 import com.vaccin.vaccin.service.VaccineAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@PreAuthorize("hasRole('ROLE_USER')")
 @RestController
 public class VaccineAppointmentController {
 
@@ -28,13 +31,8 @@ public class VaccineAppointmentController {
             List<VaccineAppointmentDto> vaccineAppointmentDtoList =
                 vaccineAppointmentService.appointUser(vaccineAppointmentCreateDto);
             return new ResponseEntity<>(vaccineAppointmentDtoList, HttpStatus.CREATED);
-        } catch (Exception exception) {
-            if (exception.getMessage().equals("User not found")
-                    || exception.getMessage().equals("Vaccine Center not found")) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            } else {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            }
+        } catch (AppointmentCreateException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -2,6 +2,7 @@ package com.vaccin.vaccin.controller;
 
 import com.vaccin.vaccin.dto.VaccineCenterCreateDto;
 import com.vaccin.vaccin.dto.VaccineCenterDto;
+import com.vaccin.vaccin.exception.CenterCreateException;
 import com.vaccin.vaccin.service.VaccineCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class VaccineCenterController {
         try {
             VaccineCenterDto vaccineCenterDto = vaccineCenterService.addCenter(vaccineCenterCreateDto);
             return new ResponseEntity<>(vaccineCenterDto, HttpStatus.OK);
-        } catch (Exception exception) {
+        } catch (CenterCreateException exception) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

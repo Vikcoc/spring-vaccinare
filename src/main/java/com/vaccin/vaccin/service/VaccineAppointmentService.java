@@ -2,6 +2,7 @@ package com.vaccin.vaccin.service;
 
 import com.vaccin.vaccin.dto.VaccineAppointmentCreateDto;
 import com.vaccin.vaccin.dto.VaccineAppointmentDto;
+import com.vaccin.vaccin.exception.AppointmentCreateException;
 import com.vaccin.vaccin.model.TimeSlot;
 import com.vaccin.vaccin.model.User;
 import com.vaccin.vaccin.model.VaccineAppointment;
@@ -73,22 +74,23 @@ public class VaccineAppointmentService {
     }
 
 
-    public List<VaccineAppointmentDto> appointUser(VaccineAppointmentCreateDto vaccineAppointmentCreateDto) throws Exception {
+    public List<VaccineAppointmentDto> appointUser(VaccineAppointmentCreateDto vaccineAppointmentCreateDto)
+            throws AppointmentCreateException {
 
         Optional<User> patientOptional = userRepository.findById(vaccineAppointmentCreateDto.getPatientId());
         Optional<VaccineCenter> vaccineCenterOptional = vaccineCenterRepository.findById(vaccineAppointmentCreateDto.getVaccineCenterId());
         if (patientOptional.isEmpty()) {
-            throw new Exception("User not found");
+            throw new AppointmentCreateException("User not found");
         }
         if (vaccineCenterOptional.isEmpty()) {
-            throw new Exception("Vaccine Center not found");
+            throw new AppointmentCreateException("Vaccine Center not found");
         }
 
         User patient = patientOptional.get();
         VaccineCenter vaccineCenter = vaccineCenterOptional.get();
 
         if (vaccineAppointmentRepository.findByPatient(patient).size() > 0 || patient.getAppointed()) {
-            throw new Exception("User already appointed");
+            throw new AppointmentCreateException("User already appointed");
         }
 
         Date initialDate = Date.valueOf(vaccineAppointmentCreateDto.getDate());
