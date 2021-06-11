@@ -26,6 +26,18 @@ public class VaccineCenterService {
         this.vaccineTypeRepository = vaccineTypeRepository;
     }
 
+    public List<VaccineCenterDto> getAllCenters() {
+
+        List<VaccineCenter> vaccineCenters = vaccineCenterRepository.findAll();
+
+        List<VaccineCenterDto> vaccineCenterDtoList
+                = vaccineCenters.stream()
+                .map(VaccineCenterDto::new)
+                .collect(Collectors.toList());
+
+        return vaccineCenterDtoList;
+    }
+
     public List<VaccineCenterDto> getCentersAroundCoords(Double latitude, Double longitude) {
         List<VaccineCenter> vaccineCenters = vaccineCenterRepository.findAll();
 

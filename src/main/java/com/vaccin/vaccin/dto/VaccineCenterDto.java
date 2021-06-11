@@ -1,11 +1,10 @@
 package com.vaccin.vaccin.dto;
 
-import com.vaccin.vaccin.model.Doctor;
 import com.vaccin.vaccin.model.VaccineCenter;
-import com.vaccin.vaccin.model.VaccineType;
 
 public class VaccineCenterDto {
 
+    private Long id;
     private String name;
     private String address;
     private double latitude;
@@ -17,6 +16,7 @@ public class VaccineCenterDto {
 
     public VaccineCenterDto(VaccineCenter vaccineCenter) {
 
+        this.id = vaccineCenter.getId();
         this.name = vaccineCenter.getName();
         this.address = vaccineCenter.getAddress();
         this.latitude = vaccineCenter.getLatitude();
@@ -24,6 +24,10 @@ public class VaccineCenterDto {
         this.vaccineTypeBrand = vaccineCenter.getVaccineType().getBrand();
     }
 
+
+    public Long getId() {
+        return id;
+    }
 
     public String getName() {
         return name;

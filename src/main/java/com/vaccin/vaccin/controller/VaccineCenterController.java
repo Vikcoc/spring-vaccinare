@@ -19,6 +19,14 @@ public class VaccineCenterController {
         this.vaccineCenterService = vaccineCenterService;
     }
 
+    @GetMapping("/centers")
+    public List<VaccineCenterDto> getAllCenters() {
+        List<VaccineCenterDto> vaccineCenters =
+                vaccineCenterService.getAllCenters();
+
+        return vaccineCenters;
+    }
+
     @GetMapping("/centers/{latitude}/{longitude}")
     public List<VaccineCenterDto> getCentersAround(@PathVariable double latitude,
                        @PathVariable double longitude) {
