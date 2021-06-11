@@ -43,6 +43,7 @@ public class ArticlesController {
                         "Tel Verde 2: 021.642.28.29\u200B\n" +
                         "Tel Verde 3: 021.642.20.07\n" +
                         "Tel Verde 4: 021.642.20.08",
+                1,
                 1
         ));
 
@@ -80,7 +81,8 @@ public class ArticlesController {
                         "Persoanele cu simptome ușoare care nu au alte probleme de sănătate trebuie să se autoizoleze.\n" +
                         "\n" +
                         "Din momentul în care o persoană este infectată cu virusul, durează în medie 5-6 zile până să apară simptomele; totuși, poate dura și până la 14 zile.",
-                5
+                5,
+                1
         ));
 
         art.add(new ArticleDto(
@@ -96,7 +98,8 @@ public class ArticlesController {
                             "1.08 mil. infectări \n" +
                             "1.04 mil. s-au vindecat\n" +
                             "31 383 decese",
-                1
+                1,
+                2
                 ));
 
         art.add(new ArticleDto(
@@ -128,7 +131,8 @@ public class ArticlesController {
                         "Dexametazona este un corticosteroid care poate ajuta la reducerea timpului de folosire a unui ventilator și la salvarea vieților pacienților în stare gravă sau critică.\n" +
                         "\n" +
                         "OMS nu recomandă automedicația cu niciun tip de medicament, inclusiv antibiotice, ca măsură de prevenție sau tratament pentru COVID-19.",
-                7
+                7,
+                1
         ));
 
         art.add(new ArticleDto(
@@ -208,7 +212,8 @@ public class ArticlesController {
                         "\n" +
                         "Cum funcționează vaccinurile pentru care au fost depuse cereri de obținere a autorizațiilor de punere pe piață?  (BNT162b2 și RNA1273)\n" +
                         "Vaccinurile vor pregăti organismul uman să se apere împotriva COVID-19. Pentru a pătrunde în organism și pentru a cauza boala, virusul SARS-CoV-2 utilizează o proteină aflată pe învelișul său, proteină denumită proteina S (spike). Vaccinurile conțin instrucțiunile genetice (ARN mesager) necesare pentru generarea proteinei S. Când o persoană este vaccinată, celulele sale vor ”citi” instrucțiunile genetice din ARN-ul mesager și vor sintetiza proteina S. Sistemul imun al persoanei respective va recunoaște această proteină ca fiind străină și va declanșa mecanismele de apărare imună, producând anticorpi  și celule T specifice. Dacă mai târziu, persoana vaccinată va intra în contact cu virusul SARS-CoV-2, sistemul său imun va recunoaște virusul și, prin intermediul anticorpilor și al celulelor T specifice, va neutraliza virusul, prevenind, astfel, intrarea în celulele sănătoase ale corpului și distrugând eventualele celule infectate. Astfel, se va asigura protecția împotriva COVID-19.",
-                10
+                10,
+                2
         ));
 
         art.add(new ArticleDto(
@@ -258,7 +263,8 @@ public class ArticlesController {
                         "\n" +
                         "Cereți ajutor când este necesar\n" +
                         "Nu ezitați că solicitați ajutorul unui profesionist dacă sunteți de părere că este necesar. Un bun punct de plecare este profesionistul local în domeniul medical. Și liniile de asistență pot fi o sursă de ajutor.",
-                8
+                8,
+                1
         ));
 
         articles = art;

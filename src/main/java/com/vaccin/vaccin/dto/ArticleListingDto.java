@@ -5,12 +5,14 @@ public class ArticleListingDto {
     private final String picture;
     private final String title;
     private final int readingTime;
+    private final int type;
 
-    public ArticleListingDto(Integer id, String picture, String title, int readingTime) {
+    public ArticleListingDto(Integer id, String picture, String title, int readingTime, int type) {
         this.id = id;
         this.picture = picture;
         this.title = title;
         this.readingTime = readingTime;
+        this.type = type;
     }
 
     public ArticleListingDto(ArticleDto art){
@@ -18,6 +20,7 @@ public class ArticleListingDto {
         this.picture = art.getPicture();
         this.title = art.getTitle();
         this.readingTime = art.getReadingTime();
+        this.type = art.getType();
     }
 
     public Integer getId() {
@@ -34,5 +37,9 @@ public class ArticleListingDto {
 
     public int getReadingTime() {
         return readingTime;
+    }
+
+    public int getType() {
+        return type;
     }
 }
