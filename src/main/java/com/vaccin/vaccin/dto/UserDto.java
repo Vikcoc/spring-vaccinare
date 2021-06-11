@@ -11,7 +11,6 @@ public class UserDto {
     private String name;
     private Date birthDate;
     private String address;
-    private String password;
 
 
     public UserDto(User user){
@@ -20,7 +19,6 @@ public class UserDto {
         this.name = user.getName();
         this.birthDate = user.getBirthDate();
         this.address = user.getAddress();
-        this.password = user.getPassword();
     }
 
     public Long getId() {
@@ -63,11 +61,4 @@ public class UserDto {
         this.address = address;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
