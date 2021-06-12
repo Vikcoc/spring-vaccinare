@@ -5,6 +5,8 @@ import com.vaccin.vaccin.dto.UserDto;
 import com.vaccin.vaccin.model.VaccineType;
 import com.vaccin.vaccin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
@@ -56,5 +58,12 @@ public class TestController {
     @GetMapping("/userTest")
     public String userTest(){
         return "User test";
+    }
+
+    @GetMapping("/throw")
+    public ResponseEntity<String> throwFunction() throws Exception {
+        if(true)
+            throw new Exception();
+        return new ResponseEntity<>("User test", HttpStatus.OK);
     }
 }
