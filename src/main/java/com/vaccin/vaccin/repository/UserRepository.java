@@ -16,4 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT new com.vaccin.vaccin.dto.AuthDto(u.email, u.password, u.role.role) FROM User u WHERE u.email = ?1")
     Optional<AuthDto> getByEmailWithPasswordAndRole(String email);
 
+    @Query("SELECT u.name FROM User u WHERE u.cnp = ?1")
+    Optional<User> getByCnp(String cnp);
 }

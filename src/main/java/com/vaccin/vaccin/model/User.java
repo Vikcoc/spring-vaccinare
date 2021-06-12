@@ -25,7 +25,7 @@ public class User {
     @Column(columnDefinition = "boolean default false")
     private Boolean isAppointed;
 
-    @Column(unique = true)
+    @Column(unique = true, name = "email")
     private String email;
     private String password;
 

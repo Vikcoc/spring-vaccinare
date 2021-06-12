@@ -3,11 +3,8 @@ package com.vaccin.vaccin.dto;
 public class VaccineAppointmentCreateDto {
 
     private Long patientId;
-
     private String date;
-
     private String time;
-
     private Long vaccineCenterId;
 
     public Long getPatientId() {

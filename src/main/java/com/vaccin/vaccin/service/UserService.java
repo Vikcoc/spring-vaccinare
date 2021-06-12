@@ -40,6 +40,10 @@ public class UserService {
             throw new UserCreateException("User with email already exists");
         }
 
+        Optional<User> userOptional1 = userRepository.getByCnp(userCreateDto.getCnp());
+        if (userOptional1.isPresent()) {
+            throw new UserCreateException("User with CNP already exists");
+        }
         User user;
         try {
             user = new User(userCreateDto);

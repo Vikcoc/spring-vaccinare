@@ -2,8 +2,9 @@ package com.vaccin.vaccin.controller;
 
 import com.vaccin.vaccin.dto.VaccineAppointmentCreateDto;
 import com.vaccin.vaccin.dto.VaccineAppointmentDto;
-import com.vaccin.vaccin.exception.AppointmentCreateException;
+import com.vaccin.vaccin.exception.*;
 import com.vaccin.vaccin.service.VaccineAppointmentService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@PreAuthorize("hasRole('ROLE_USER')")
+//@PreAuthorize("hasRole('ROLE_USER')")
 @RestController
 public class VaccineAppointmentController {
 
@@ -31,7 +32,8 @@ public class VaccineAppointmentController {
             List<VaccineAppointmentDto> vaccineAppointmentDtoList =
                 vaccineAppointmentService.appointUser(vaccineAppointmentCreateDto);
             return new ResponseEntity<>(vaccineAppointmentDtoList, HttpStatus.CREATED);
-        } catch (AppointmentCreateException exception) {
+        } catch (TimeSlotFullException | UserGetException | VaccineCenterGetException
+                | UserAlreadyAppointedException exception) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -42,8 +44,19 @@ public class VaccineAppointmentController {
         try {
             List<VaccineAppointmentDto> appointments = vaccineAppointmentService.getAppointments(patientId);
             return new ResponseEntity<>(appointments, HttpStatus.OK);
-        } catch (Exception exception) {
+        } catch (UserGetException exception) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @DeleteMapping("/appointments/cancel/{patientId}")
+    public ResponseEntity<Object> cancelAppointments(@PathVariable long patientId) {
+
+        try {
+            vaccineAppointmentService.deleteAppointments(patientId);
+        } catch (UserGetException | UserNotAppointedException | AppointmentDeleteException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
