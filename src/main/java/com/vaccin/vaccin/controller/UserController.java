@@ -2,15 +2,15 @@ package com.vaccin.vaccin.controller;
 
 import com.vaccin.vaccin.dto.UserCreateDto;
 import com.vaccin.vaccin.dto.UserDto;
+import com.vaccin.vaccin.exception.UserCreateException;
+import com.vaccin.vaccin.exception.UserGetException;
+import com.vaccin.vaccin.exception.UserUpdateException;
 import com.vaccin.vaccin.service.UserService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -28,7 +28,28 @@ public class UserController {
         try {
             UserDto userDto = userService.createUser(userCreateDto);
             return new ResponseEntity<>(userDto, HttpStatus.CREATED);
-        } catch (Exception exception) {
+        } catch (UserCreateException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/users/get/{userId}")
+    public ResponseEntity<UserDto> retrieveUser(@PathVariable Long userId) {
+        try {
+            UserDto userDto = userService.getUser(userId);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        } catch (UserGetException exception) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/users/edit/{userId}")
+    public ResponseEntity<UserDto> editUser(@PathVariable Long userId, @RequestBody UserCreateDto userCreateDto) {
+
+        try {
+            UserDto userDto = userService.updateUser(userId, userCreateDto);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        } catch (UserUpdateException exception) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
