@@ -4,6 +4,7 @@ import com.vaccin.vaccin.dto.UserCreateDto;
 import com.vaccin.vaccin.dto.UserDto;
 import com.vaccin.vaccin.exception.UserCreateException;
 import com.vaccin.vaccin.exception.UserGetException;
+import com.vaccin.vaccin.exception.UserPromotionException;
 import com.vaccin.vaccin.exception.UserUpdateException;
 import com.vaccin.vaccin.service.UserService;
 import org.apache.coyote.Response;
@@ -50,6 +51,17 @@ public class UserController {
             UserDto userDto = userService.updateUser(userId, userCreateDto);
             return new ResponseEntity<>(userDto, HttpStatus.OK);
         } catch (UserUpdateException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PatchMapping("/users/promote/{userId}")
+    public ResponseEntity<UserDto> promoteUser(@PathVariable long userId) {
+
+        try {
+            UserDto userDto = userService.promoteToDoctor(userId);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        } catch (UserGetException | UserPromotionException exception) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
