@@ -109,6 +109,7 @@ public class UserService {
 
         Role doctorRole = roleRepository.findByRole("ROLE_DOCTOR").get();
         user.setRole(doctorRole);
+        user.setAppointed(null);
         userRepository.save(user);
 
         return new UserDto(user);
