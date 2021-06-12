@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,26 +31,63 @@ public class TimeSlotService {
         this.vaccineCenterRepository = vaccineCenterRepository;
     }
 
-    public String addTimeSlot(TimeSlotCreateDto timeSlotCreateDto) {
+    public TimeSlot getTimeSlot(Date date, Time time, VaccineCenter vaccineCenter) {
+        List<TimeSlot> timeSlotList = timeSlotRepository.findByDateTimeCenter(date, time, vaccineCenter.getId());
 
-        TimeSlot timeSlot = new TimeSlot(timeSlotCreateDto);
-
-        timeSlot.setFull(false);
-
-        Long vaccineCenterId = timeSlotCreateDto.getVaccineCenterId();
-        Optional<VaccineCenter> vaccineCenterOptional = vaccineCenterRepository.findById(vaccineCenterId);
-
-        if (vaccineCenterOptional.isEmpty()) {
-            return "Vaccine Center not found";
+        if (!timeSlotList.isEmpty()) {
+            return timeSlotList.get(0);
         }
-
-        VaccineCenter vaccineCenter = vaccineCenterOptional.get();
-
-        timeSlot.setVaccineCenter(vaccineCenter);
-
-        timeSlotRepository.save(timeSlot);
-
-        return "Added TimeSlot";
+        return addTimeSlot(date, time, vaccineCenter);
     }
 
+    public TimeSlot addTimeSlot(Date date, Time time, VaccineCenter vaccineCenter) {
+        TimeSlot newTimeSlot = new TimeSlot();
+        newTimeSlot.setDate(date);
+        newTimeSlot.setTime(time);
+        newTimeSlot.setVaccineCenter(vaccineCenter);
+        newTimeSlot.setNoOfAppointments(0);
+        newTimeSlot.setFull(false);
+
+        timeSlotRepository.save(newTimeSlot);
+
+        return newTimeSlot;
+    }
+
+    public boolean isTimeSlotAvailable(TimeSlot timeSlot) {
+        return timeSlot.getNoOfAppointments() <= 5;
+    }
+
+    public TimeSlot getAvailableBoosterTimeSlot(TimeSlot initialTimeSlot) {
+        Date initialDate = initialTimeSlot.getDate();
+        Time initialTime = initialTimeSlot.getTime();
+        int daysBetween = initialTimeSlot.getVaccineCenter().getVaccineType().getDaysBetweenShots();
+        Date boosterDate = addDays(initialDate, daysBetween);
+        Time boosterTime = Time.valueOf(initialTime.toString());
+
+        TimeSlot boosterTimeSlot = getTimeSlot(boosterDate, boosterTime, initialTimeSlot.getVaccineCenter());
+        while (boosterTimeSlot.getFull()) {
+            boosterDate = addDays(boosterTimeSlot.getDate(), 1);
+            boosterTimeSlot = getTimeSlot(boosterDate, boosterTime, initialTimeSlot.getVaccineCenter());
+        }
+
+        return boosterTimeSlot;
+    }
+
+    private Date addDays(Date date, int noOfDays) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate localDate = LocalDate.parse(date.toString(), formatter)
+                .plusDays(noOfDays);
+
+        return Date.valueOf(localDate);
+    }
+
+    private Time addHours(Time time, int noOfHours) {
+        LocalTime localTime = time.toLocalTime();
+
+        localTime = localTime.plusHours(noOfHours);
+
+        return Time.valueOf(localTime);
+    }
 }
