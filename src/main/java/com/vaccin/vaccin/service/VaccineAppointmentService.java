@@ -83,9 +83,9 @@ public class VaccineAppointmentService {
         VaccineAppointment boosterAppointment = addAppointment(patient, boosterTimeSlot, initialAppointment);
 
         // cele doua timesloturi trebuie updatate in DB
-        initialTimeSlot.setNoOfAppointments(initialTimeSlot.getNoOfAppointments() + 1);
+        initialTimeSlot = timeSlotService.increaseNoOfAppointments(initialTimeSlot);
         timeSlotRepository.save(initialTimeSlot);
-        boosterTimeSlot.setNoOfAppointments(boosterTimeSlot.getNoOfAppointments() + 1);
+        boosterTimeSlot = timeSlotService.increaseNoOfAppointments(boosterTimeSlot);
         timeSlotRepository.save(initialTimeSlot);
 
         // userul trebuie updatat in DB
@@ -152,7 +152,7 @@ public class VaccineAppointmentService {
             // updatez timeslotul
 
             TimeSlot timeSlot = appointment.getTimeSlot();
-            timeSlot.setNoOfAppointments(timeSlot.getNoOfAppointments() - 1);
+            timeSlot = timeSlotService.decreaseNoOfAppointments(timeSlot);
             timeSlotRepository.save(timeSlot);
 
             patient.setAppointed(false);

@@ -90,4 +90,19 @@ public class TimeSlotService {
 
         return Time.valueOf(localTime);
     }
+
+    public TimeSlot increaseNoOfAppointments(TimeSlot timeSlot) {
+        int noOfAppointments = timeSlot.getNoOfAppointments();
+        timeSlot.setNoOfAppointments(++noOfAppointments);
+        timeSlot.setFull(noOfAppointments > 5);
+        return timeSlot;
+    }
+
+    public TimeSlot decreaseNoOfAppointments(TimeSlot timeSlot) {
+        int noOfAppointments = timeSlot.getNoOfAppointments();
+        timeSlot.setNoOfAppointments(--noOfAppointments);
+        timeSlot.setFull(noOfAppointments > 5);
+        return timeSlot;
+    }
+
 }
