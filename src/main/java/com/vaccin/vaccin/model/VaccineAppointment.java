@@ -23,6 +23,10 @@ public class VaccineAppointment {
     @JoinColumn(name = "time_slot_id")
     private TimeSlot timeSlot;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "initial_appointment_id")
+    private VaccineAppointment initialAppointment;
+
     @Column(columnDefinition = "boolean default false")
     private Boolean fulfilled;
 
@@ -48,20 +52,20 @@ public class VaccineAppointment {
         this.patient = patient;
     }
 
-//    public Doctor getDoctor() {
-//        return doctor;
-//    }
-//
-//    public void setDoctor(Doctor doctor) {
-//        this.doctor = doctor;
-//    }
-
     public TimeSlot getTimeSlot() {
         return timeSlot;
     }
 
     public void setTimeSlot(TimeSlot timeSlot) {
         this.timeSlot = timeSlot;
+    }
+
+    public VaccineAppointment getInitialAppointment() {
+        return initialAppointment;
+    }
+
+    public void setInitialAppointment(VaccineAppointment initialAppointment) {
+        this.initialAppointment = initialAppointment;
     }
 
     public Boolean getFulfilled() {

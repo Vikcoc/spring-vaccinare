@@ -45,7 +45,7 @@ public class TimeSlot {
     }
 
     public void setId(Long id) {
-        id = id;
+        this.id = id;
     }
 
     public VaccineCenter getVaccineCenter() {
@@ -86,6 +86,10 @@ public class TimeSlot {
 
     public void setFull(Boolean full) {
         this.full = full;
+    }
+
+    public void setNoOfAppointments(Integer noOfAppointments) {
+        this.noOfAppointments = noOfAppointments;
     }
 
     public List<VaccineAppointment> getVaccineAppointments() {

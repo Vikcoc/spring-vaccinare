@@ -5,6 +5,7 @@ import com.vaccin.vaccin.dto.UserCreateDto;
 import com.vaccin.vaccin.dto.UserDto;
 import com.vaccin.vaccin.exception.UserCreateException;
 import com.vaccin.vaccin.exception.UserGetException;
+import com.vaccin.vaccin.exception.UserPromotionException;
 import com.vaccin.vaccin.exception.UserUpdateException;
 import com.vaccin.vaccin.model.Role;
 import com.vaccin.vaccin.model.User;
@@ -40,6 +41,10 @@ public class UserService {
             throw new UserCreateException("User with email already exists");
         }
 
+        Optional<User> userOptional1 = userRepository.getByCnp(userCreateDto.getCnp());
+        if (userOptional1.isPresent()) {
+            throw new UserCreateException("User with CNP already exists");
+        }
         User user;
         try {
             user = new User(userCreateDto);
@@ -93,5 +98,24 @@ public class UserService {
     public List<UserDto> getDoctors(){
         var users = userRepository.getDoctors();
         return users.stream().map(UserDto::new).collect(Collectors.toList());
+    }
+
+    public UserDto promoteToDoctor(long userId) throws UserGetException, UserPromotionException {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            throw new UserGetException("User not found");
+        }
+        User user = userOptional.get();
+
+        if (!user.getRole().getRole().equals("ROLE_USER")) {
+            throw new UserPromotionException("User is already Doctor or Admin");
+        }
+
+        Role doctorRole = roleRepository.findByRole("ROLE_DOCTOR").get();
+        user.setRole(doctorRole);
+        user.setAppointed(null);
+        userRepository.save(user);
+
+        return new UserDto(user);
     }
 }
