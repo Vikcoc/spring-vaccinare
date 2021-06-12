@@ -4,6 +4,7 @@ import com.vaccin.vaccin.dto.VaccineAppointmentCreateDto;
 import com.vaccin.vaccin.dto.VaccineAppointmentDto;
 import com.vaccin.vaccin.exception.*;
 import com.vaccin.vaccin.service.VaccineAppointmentService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,5 +49,14 @@ public class VaccineAppointmentController {
         }
     }
 
+    @DeleteMapping("/appointments/cancel/{patientId}")
+    public ResponseEntity<Object> cancelAppointments(@PathVariable long patientId) {
 
+        try {
+            vaccineAppointmentService.deleteAppointments(patientId);
+        } catch (UserGetException | UserNotAppointedException | AppointmentDeleteException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

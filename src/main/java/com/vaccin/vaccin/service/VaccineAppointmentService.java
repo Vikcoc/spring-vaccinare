@@ -2,10 +2,7 @@ package com.vaccin.vaccin.service;
 
 import com.vaccin.vaccin.dto.VaccineAppointmentCreateDto;
 import com.vaccin.vaccin.dto.VaccineAppointmentDto;
-import com.vaccin.vaccin.exception.TimeSlotFullException;
-import com.vaccin.vaccin.exception.UserAlreadyAppointedException;
-import com.vaccin.vaccin.exception.UserGetException;
-import com.vaccin.vaccin.exception.VaccineCenterGetException;
+import com.vaccin.vaccin.exception.*;
 import com.vaccin.vaccin.model.TimeSlot;
 import com.vaccin.vaccin.model.User;
 import com.vaccin.vaccin.model.VaccineAppointment;
@@ -19,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -128,5 +126,37 @@ public class VaccineAppointmentService {
         return vaccineAppointmentDtos;
     }
 
-    public void deleteAppointments(Long patientId);
+    public void deleteAppointments(Long patientId) throws UserGetException, UserNotAppointedException, AppointmentDeleteException {
+        Optional<User> patientOptional = userRepository.findById(patientId);
+        if (patientOptional.isEmpty()) {
+            throw new UserGetException("User not found");
+        }
+        User patient = patientOptional.get();
+
+        List<VaccineAppointment> vaccineAppointments = vaccineAppointmentRepository.findByPatient(patient);
+
+        if (vaccineAppointments.isEmpty()) {
+            throw new UserNotAppointedException("User not appointed");
+        }
+
+        // daca nu sunt toate programarile in viitor
+        if (!vaccineAppointments.stream().allMatch
+                (va -> va.getTimeSlot()
+                        .getDate().toLocalDate().compareTo(LocalDate.now()) < 0)) {
+            throw new AppointmentDeleteException("Appointments are not in the future");
+        }
+
+        for (var appointment : vaccineAppointments) {
+            // il sterg din DB
+            vaccineAppointmentRepository.delete(appointment);
+            // updatez timeslotul
+
+            TimeSlot timeSlot = appointment.getTimeSlot();
+            timeSlot.setNoOfAppointments(timeSlot.getNoOfAppointments() - 1);
+            timeSlotRepository.save(timeSlot);
+
+            patient.setAppointed(false);
+            userRepository.save(patient);
+        }
+    }
 }
