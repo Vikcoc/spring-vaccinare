@@ -40,8 +40,8 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
-    @GetMapping("/users/getByEmail/{userEmail}")
-    public ResponseEntity<UserDto> retrieveUser(@PathVariable String userEmail) throws NotFoundException {
+    @GetMapping("/users/getByEmail")
+    public ResponseEntity<UserDto> retrieveUser(@RequestParam String userEmail) throws NotFoundException {
         UserDto userDto = userService.getUser(userEmail);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
