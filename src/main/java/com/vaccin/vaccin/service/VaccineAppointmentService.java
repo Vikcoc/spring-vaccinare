@@ -12,11 +12,13 @@ import com.vaccin.vaccin.repository.UserRepository;
 import com.vaccin.vaccin.repository.VaccineAppointmentRepository;
 import com.vaccin.vaccin.repository.VaccineCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -158,5 +160,33 @@ public class VaccineAppointmentService {
             patient.setAppointed(false);
             userRepository.save(patient);
         }
+    }
+
+    public VaccineAppointmentDto fulfillAppointment(long appointmentId) throws BadRequestException {
+
+        Optional<VaccineAppointment> vaccineAppointmentOptional = vaccineAppointmentRepository.findById(appointmentId);
+        if (vaccineAppointmentOptional.isEmpty()) {
+            throw new BadRequestException(ErrorMessages.appointmentNotFound);
+        }
+
+        VaccineAppointment vaccineAppointment = vaccineAppointmentOptional.get();
+
+        if (vaccineAppointment.getFulfilled()) {
+            throw new BadRequestException(ErrorMessages.appointmentAlreadyMarkedFulfilled);
+        }
+
+        Date appointmentDate = vaccineAppointment.getTimeSlot().getDate();
+        Time appointmentTime = vaccineAppointment.getTimeSlot().getTime();
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime appointmentDateTime = appointmentDate.toLocalDate()
+                .atTime(appointmentTime.toLocalTime());
+
+        if (appointmentDateTime.isAfter(now)) {
+            throw new BadRequestException(ErrorMessages.appointmentNotPassed);
+        }
+
+        vaccineAppointment.setFulfilled(true);
+        return new VaccineAppointmentDto(vaccineAppointmentRepository.save(vaccineAppointment));
     }
 }

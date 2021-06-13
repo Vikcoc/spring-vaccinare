@@ -46,4 +46,12 @@ public class VaccineAppointmentController {
         vaccineAppointmentService.deleteAppointments(patientId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    @PatchMapping("/appointments/fulfilled/{appointmentId}")
+    public ResponseEntity<VaccineAppointmentDto> markAppointmentFulfilled(@PathVariable long appointmentId) throws BadRequestException {
+
+        VaccineAppointmentDto vaccineAppointmentDto = vaccineAppointmentService.fulfillAppointment(appointmentId);
+        return new ResponseEntity<>();
+    }
 }
