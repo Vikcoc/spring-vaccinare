@@ -52,6 +52,6 @@ public class VaccineAppointmentController {
     public ResponseEntity<VaccineAppointmentDto> markAppointmentFulfilled(@PathVariable long appointmentId) throws BadRequestException {
 
         VaccineAppointmentDto vaccineAppointmentDto = vaccineAppointmentService.fulfillAppointment(appointmentId);
-        return new ResponseEntity<>();
+        return new ResponseEntity<>(vaccineAppointmentDto, HttpStatus.OK);
     }
 }
