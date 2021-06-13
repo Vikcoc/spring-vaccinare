@@ -19,4 +19,5 @@ public class ErrorMessages {
     public final static String appointmentNotFound = "Vaccine Appointment not found";
     public final static String appointmentNotPassed = "The appointment date has not come yet";
     public final static String appointmentAlreadyMarkedFulfilled = "The appointment was already marked fulfilled";
+    public final static String timeSlotNotFound = "Time Slot not found";
 }
