@@ -13,11 +13,14 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -35,6 +38,14 @@ public class VaccinApplicationTests {
 
 		Mockito.when(vaccineTypeRepository.findById(0L))
 				.thenReturn(Optional.empty());
+
+		Mockito.when(vaccineCenterRepository.save(any())).thenAnswer(new Answer<Object>() {
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				Object[] args = invocation.getArguments();
+				return args[0];
+			}
+		});
 
 		VaccineType vt = new VaccineType();
 		vt.setId(1L);

@@ -16,6 +16,7 @@ public class GenerateCenters {
             vc.setAddress("O adresa " + i);
             vc.setLongitude(((double) i)/ 10);
             vc.setLatitude(((double) i)/ 10);
+            vc.setDosesAvailable((long) i);
 
             VaccineType vt = new VaccineType();
             vt.setBrand("Some brand " + i);
