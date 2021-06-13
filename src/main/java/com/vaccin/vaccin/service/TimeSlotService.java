@@ -2,6 +2,10 @@ package com.vaccin.vaccin.service;
 
 
 import com.vaccin.vaccin.dto.TimeSlotCreateDto;
+import com.vaccin.vaccin.dto.TimeSlotDto;
+import com.vaccin.vaccin.exception.BadRequestException;
+import com.vaccin.vaccin.exception.ErrorMessages;
+import com.vaccin.vaccin.exception.NotFoundException;
 import com.vaccin.vaccin.model.TimeSlot;
 import com.vaccin.vaccin.model.VaccineCenter;
 import com.vaccin.vaccin.repository.TimeSlotRepository;
@@ -29,6 +33,16 @@ public class TimeSlotService {
     public TimeSlotService(TimeSlotRepository timeSlotRepository, VaccineCenterRepository vaccineCenterRepository) {
         this.timeSlotRepository = timeSlotRepository;
         this.vaccineCenterRepository = vaccineCenterRepository;
+    }
+
+    public TimeSlotDto getTimeSlot(long timeSlotId) throws NotFoundException {
+        Optional<TimeSlot> timeSlotOptional = timeSlotRepository.findById(timeSlotId);
+
+        if (timeSlotOptional.isEmpty()) {
+            throw new NotFoundException(ErrorMessages.timeSlotNotFound);
+        }
+
+        return new TimeSlotDto(timeSlotOptional.get());
     }
 
     public TimeSlot getTimeSlot(Date date, Time time, VaccineCenter vaccineCenter) {
