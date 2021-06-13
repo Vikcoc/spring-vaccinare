@@ -11,6 +11,7 @@ public class UserDto {
     private String name;
     private Date birthDate;
     private String address;
+    private String cnp;
 
 
     public UserDto(User user){
@@ -19,6 +20,7 @@ public class UserDto {
         this.name = user.getName();
         this.birthDate = user.getBirthDate();
         this.address = user.getAddress();
+        this.cnp = user.getCnp();
     }
 
     public Long getId() {
@@ -61,4 +63,11 @@ public class UserDto {
         this.address = address;
     }
 
+    public String getCnp() {
+        return cnp;
+    }
+
+    public void setCnp(String cnp) {
+        this.cnp = cnp;
+    }
 }
