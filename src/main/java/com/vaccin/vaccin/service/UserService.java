@@ -3,10 +3,9 @@ package com.vaccin.vaccin.service;
 import com.vaccin.vaccin.dto.AuthDto;
 import com.vaccin.vaccin.dto.UserCreateDto;
 import com.vaccin.vaccin.dto.UserDto;
-import com.vaccin.vaccin.exception.UserCreateException;
-import com.vaccin.vaccin.exception.UserGetException;
-import com.vaccin.vaccin.exception.UserPromotionException;
-import com.vaccin.vaccin.exception.UserUpdateException;
+import com.vaccin.vaccin.exception.BadRequestException;
+import com.vaccin.vaccin.exception.ErrorMessages;
+import com.vaccin.vaccin.exception.NotFoundException;
 import com.vaccin.vaccin.model.Role;
 import com.vaccin.vaccin.model.User;
 import com.vaccin.vaccin.repository.RoleRepository;
@@ -33,23 +32,23 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public UserDto createUser(UserCreateDto userCreateDto) throws UserCreateException {
+    public UserDto createUser(UserCreateDto userCreateDto) throws BadRequestException {
 
         Optional<AuthDto> userOptional = userRepository.getByEmailWithPasswordAndRole(userCreateDto.getEmail());
 
         if (userOptional.isPresent()) {
-            throw new UserCreateException("User with email already exists");
+            throw new BadRequestException(ErrorMessages.emailInUse);
         }
 
         Optional<User> userOptional1 = userRepository.getByCnp(userCreateDto.getCnp());
         if (userOptional1.isPresent()) {
-            throw new UserCreateException("User with CNP already exists");
+            throw new BadRequestException(ErrorMessages.personalDataInUse);
         }
         User user;
         try {
             user = new User(userCreateDto);
         } catch (IllegalArgumentException e) {
-            throw new UserCreateException("Date format incorrect");
+            throw new BadRequestException(ErrorMessages.dateFormat);
         }
 
 
@@ -65,20 +64,20 @@ public class UserService {
 
     }
 
-    public UserDto getUser(Long userId) throws UserGetException {
+    public UserDto getUser(Long userId) throws NotFoundException {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isEmpty()) {
-            throw new UserGetException("User not found");
+            throw new NotFoundException(ErrorMessages.userNotFound);
         }
 
         return new UserDto(userOptional.get());
     }
 
-    public UserDto updateUser(Long userId, UserCreateDto userCreateDto) throws UserUpdateException {
+    public UserDto updateUser(Long userId, UserCreateDto userCreateDto) throws BadRequestException {
 
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isEmpty()) {
-            throw new UserUpdateException("User not found");
+            throw new BadRequestException(ErrorMessages.userNotFound);
         }
 
         User user = userOptional.get();
@@ -87,7 +86,7 @@ public class UserService {
         try {
             user.setBirthDate(Date.valueOf(userCreateDto.getBirthDate()));
         } catch (IllegalArgumentException exception) {
-            throw new UserUpdateException("BirthDate value incorret");
+            throw new BadRequestException(ErrorMessages.incorrectBirthDate);
         }
         user.setAddress(userCreateDto.getAddress());
         user.setCnp(userCreateDto.getCnp());
@@ -100,15 +99,15 @@ public class UserService {
         return users.stream().map(UserDto::new).collect(Collectors.toList());
     }
 
-    public UserDto promoteToDoctor(long userId) throws UserGetException, UserPromotionException {
+    public UserDto promoteToDoctor(long userId) throws BadRequestException {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isEmpty()) {
-            throw new UserGetException("User not found");
+            throw new BadRequestException(ErrorMessages.userNotFound);
         }
         User user = userOptional.get();
 
         if (!user.getRole().getRole().equals("ROLE_USER")) {
-            throw new UserPromotionException("User is already Doctor or Admin");
+            throw new BadRequestException(ErrorMessages.isDoctor);
         }
 
         Role doctorRole = roleRepository.findByRole("ROLE_DOCTOR").get();

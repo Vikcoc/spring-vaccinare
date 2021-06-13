@@ -2,6 +2,7 @@ package com.vaccin.vaccin.controller;
 
 import com.vaccin.vaccin.dto.UserCreateDto;
 import com.vaccin.vaccin.dto.UserDto;
+import com.vaccin.vaccin.exception.BadRequestException;
 import com.vaccin.vaccin.model.VaccineType;
 import com.vaccin.vaccin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,7 @@ public class TestController {
     @GetMapping("/throw")
     public ResponseEntity<String> throwFunction() throws Exception {
         if(true)
-            throw new Exception();
+            throw new BadRequestException("Test error");
         return new ResponseEntity<>("User test", HttpStatus.OK);
     }
 }

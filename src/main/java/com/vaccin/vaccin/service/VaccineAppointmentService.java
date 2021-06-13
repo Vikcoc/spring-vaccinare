@@ -43,25 +43,25 @@ public class VaccineAppointmentService {
     }
 
     public List<VaccineAppointmentDto> appointUser(VaccineAppointmentCreateDto vaccineAppointmentCreateDto)
-            throws UserGetException, VaccineCenterGetException, TimeSlotFullException, UserAlreadyAppointedException {
+            throws BadRequestException {
 
         List<VaccineAppointmentDto> vaccineAppointmentDtoList = new ArrayList<>();
 
         // scot userul din DB
         Optional<User> patientOptional = userRepository.findById(vaccineAppointmentCreateDto.getPatientId());
         if (patientOptional.isEmpty()) {
-            throw new UserGetException("User not found");
+            throw new BadRequestException(ErrorMessages.userNotFound);
         }
         User patient = patientOptional.get();
         if (patient.getAppointed()) {
-            throw new UserAlreadyAppointedException("User already appointed");
+            throw new BadRequestException(ErrorMessages.userIsAppointed);
         }
 
         // scot vaccine centerul din DB
         Optional<VaccineCenter> vaccineCenterOptional
                 = vaccineCenterRepository.findById(vaccineAppointmentCreateDto.getVaccineCenterId());
         if (vaccineCenterOptional.isEmpty()) {
-            throw new VaccineCenterGetException("Vaccine Center not found");
+            throw new BadRequestException(ErrorMessages.centerNotFound);
         }
         VaccineCenter vaccineCenter = vaccineCenterOptional.get();
 
@@ -70,7 +70,7 @@ public class VaccineAppointmentService {
         Time time = Time.valueOf(vaccineAppointmentCreateDto.getTime());
         TimeSlot initialTimeSlot = timeSlotService.getTimeSlot(date, time, vaccineCenter);
         if (initialTimeSlot.getFull()) {
-            throw new TimeSlotFullException("TimeSlot full");
+            throw new BadRequestException(ErrorMessages.fullTimeSlot);
         }
 
         // TimeSlotul este ok
@@ -107,11 +107,11 @@ public class VaccineAppointmentService {
         return vaccineAppointmentRepository.save(vaccineAppointment);
     }
 
-    public List<VaccineAppointmentDto> getAppointments(long patientId) throws UserGetException {
+    public List<VaccineAppointmentDto> getAppointments(long patientId) throws NotFoundException {
 
         Optional<User> patientOptional = userRepository.findById(patientId);
         if (patientOptional.isEmpty()) {
-            throw new UserGetException("Userul nu exista");
+            throw new NotFoundException(ErrorMessages.userNotFound);
         }
 
         User patient = patientOptional.get();
@@ -126,24 +126,24 @@ public class VaccineAppointmentService {
         return vaccineAppointmentDtos;
     }
 
-    public void deleteAppointments(Long patientId) throws UserGetException, UserNotAppointedException, AppointmentDeleteException {
+    public void deleteAppointments(Long patientId) throws BadRequestException {
         Optional<User> patientOptional = userRepository.findById(patientId);
         if (patientOptional.isEmpty()) {
-            throw new UserGetException("User not found");
+            throw new BadRequestException(ErrorMessages.userNotFound);
         }
         User patient = patientOptional.get();
 
         List<VaccineAppointment> vaccineAppointments = vaccineAppointmentRepository.findByPatient(patient);
 
         if (vaccineAppointments.isEmpty()) {
-            throw new UserNotAppointedException("User not appointed");
+            throw new BadRequestException(ErrorMessages.userNotAppointed);
         }
 
         // daca nu sunt toate programarile in viitor
         if (!vaccineAppointments.stream().allMatch
                 (va -> va.getTimeSlot()
                         .getDate().toLocalDate().compareTo(LocalDate.now()) < 0)) {
-            throw new AppointmentDeleteException("Appointments are not in the future");
+            throw new BadRequestException(ErrorMessages.appointmentPassed);
         }
 
         for (var appointment : vaccineAppointments) {

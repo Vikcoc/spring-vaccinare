@@ -1,6 +1,7 @@
 package com.vaccin.vaccin.service;
 
 import com.vaccin.vaccin.dto.AuthDto;
+import com.vaccin.vaccin.exception.ErrorMessages;
 import com.vaccin.vaccin.repository.UserRepository;
 import com.vaccin.vaccin.security.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
         if (optionalAuthDto.isPresent()) {
             return UserPrinciple.build(optionalAuthDto.get());
-        } throw new UsernameNotFoundException("No User found with email: " + email);
+        } throw new UsernameNotFoundException(ErrorMessages.userNotFound);
 
     }
 }
