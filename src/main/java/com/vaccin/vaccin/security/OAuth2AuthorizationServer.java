@@ -1,15 +1,18 @@
 package com.vaccin.vaccin.security;
 
+import com.vaccin.vaccin.exception.ExceptionHandlerAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -25,11 +28,13 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
 
     private AuthenticationManager authenticationManager;
     private UserDetailsService userDetailService;
+    private ExceptionHandlerAdvice exceptionTranslator;
 
     @Autowired
-    public OAuth2AuthorizationServer(AuthenticationManager authenticationManager, UserDetailsService userDetailService) {
+    public OAuth2AuthorizationServer(AuthenticationManager authenticationManager, UserDetailsService userDetailService, ExceptionHandlerAdvice exceptionTranslator) {
         this.authenticationManager=authenticationManager;
         this.userDetailService=userDetailService;
+        this.exceptionTranslator = exceptionTranslator;
     }
 
 //    http://localhost:8080/oauth/token
@@ -63,7 +68,8 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
                 .authenticationManager(authenticationManager)
                 .userDetailsService(userDetailService)
                 .tokenServices(defaultTokenService(tokenEnhancerChain))
-                .reuseRefreshTokens(false);
+                .reuseRefreshTokens(false)
+                .exceptionTranslator(exceptionTranslator);
     }
 
     @Bean

@@ -2,16 +2,19 @@ package com.vaccin.vaccin.controller;
 
 import com.vaccin.vaccin.dto.UserCreateDto;
 import com.vaccin.vaccin.dto.UserDto;
-import com.vaccin.vaccin.exception.UserCreateException;
-import com.vaccin.vaccin.exception.UserGetException;
-import com.vaccin.vaccin.exception.UserPromotionException;
-import com.vaccin.vaccin.exception.UserUpdateException;
+import com.vaccin.vaccin.exception.BadRequestException;
+import com.vaccin.vaccin.exception.NotFoundException;
 import com.vaccin.vaccin.service.UserService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
+import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
+
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -24,45 +27,29 @@ public class UserController {
     }
 
     @PostMapping("/users/register")
-    public ResponseEntity<UserDto> registerUser(@RequestBody UserCreateDto userCreateDto) {
+    public ResponseEntity<UserDto> registerUser(@RequestBody UserCreateDto userCreateDto) throws BadRequestException {
 
-        try {
-            UserDto userDto = userService.createUser(userCreateDto);
-            return new ResponseEntity<>(userDto, HttpStatus.CREATED);
-        } catch (UserCreateException exception) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        UserDto userDto = userService.createUser(userCreateDto);
+        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
+
     }
 
     @GetMapping("/users/get/{userId}")
-    public ResponseEntity<UserDto> retrieveUser(@PathVariable Long userId) {
-        try {
-            UserDto userDto = userService.getUser(userId);
-            return new ResponseEntity<>(userDto, HttpStatus.OK);
-        } catch (UserGetException exception) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<UserDto> retrieveUser(@PathVariable  Long userId) throws NotFoundException {
+        UserDto userDto = userService.getUser(userId);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @PutMapping("/users/edit/{userId}")
-    public ResponseEntity<UserDto> editUser(@PathVariable Long userId, @RequestBody UserCreateDto userCreateDto) {
+    public ResponseEntity<UserDto> editUser(@PathVariable Long userId, @RequestBody UserCreateDto userCreateDto) throws BadRequestException {
 
-        try {
-            UserDto userDto = userService.updateUser(userId, userCreateDto);
-            return new ResponseEntity<>(userDto, HttpStatus.OK);
-        } catch (UserUpdateException exception) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        UserDto userDto = userService.updateUser(userId, userCreateDto);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @PatchMapping("/users/promote/{userId}")
-    public ResponseEntity<UserDto> promoteUser(@PathVariable long userId) {
-
-        try {
-            UserDto userDto = userService.promoteToDoctor(userId);
-            return new ResponseEntity<>(userDto, HttpStatus.OK);
-        } catch (UserGetException | UserPromotionException exception) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<UserDto> promoteUser(@PathVariable long userId) throws BadRequestException {
+        UserDto userDto = userService.promoteToDoctor(userId);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 }

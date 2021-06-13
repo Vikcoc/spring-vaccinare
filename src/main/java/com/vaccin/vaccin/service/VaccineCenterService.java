@@ -2,7 +2,8 @@ package com.vaccin.vaccin.service;
 
 import com.vaccin.vaccin.dto.VaccineCenterCreateDto;
 import com.vaccin.vaccin.dto.VaccineCenterDto;
-import com.vaccin.vaccin.exception.CenterCreateException;
+import com.vaccin.vaccin.exception.BadRequestException;
+import com.vaccin.vaccin.exception.ErrorMessages;
 import com.vaccin.vaccin.model.VaccineCenter;
 import com.vaccin.vaccin.model.VaccineType;
 import com.vaccin.vaccin.repository.VaccineCenterRepository;
@@ -52,7 +53,7 @@ public class VaccineCenterService {
         return vaccineCenterDtoList;
     }
 
-    public VaccineCenterDto addCenter(VaccineCenterCreateDto vaccineCenterCreateDto) throws CenterCreateException {
+    public VaccineCenterDto addCenter(VaccineCenterCreateDto vaccineCenterCreateDto) throws BadRequestException {
         // Creez un VaccineCenter, dar ii lipsesc: VaccineType si Doctor
         VaccineCenter vaccineCenter = new VaccineCenter(vaccineCenterCreateDto);
 
@@ -64,7 +65,7 @@ public class VaccineCenterService {
 
         // il salvez daca l-am gasit
         if (vaccineTypeOptional.isEmpty()) {
-            throw new CenterCreateException("Nu exista tipul de vaccin");
+            throw new BadRequestException(ErrorMessages.noSuchVaccine);
         }
         vaccineCenter.setVaccineType(vaccineTypeOptional.get());
         return new VaccineCenterDto(vaccineCenterRepository.save(vaccineCenter));

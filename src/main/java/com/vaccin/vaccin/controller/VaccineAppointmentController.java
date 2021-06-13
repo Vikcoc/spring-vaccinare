@@ -26,37 +26,24 @@ public class VaccineAppointmentController {
 
     @PostMapping("/appointments/add")
     public ResponseEntity<List<VaccineAppointmentDto>> addAppointment
-            (@RequestBody VaccineAppointmentCreateDto vaccineAppointmentCreateDto) {
+            (@RequestBody VaccineAppointmentCreateDto vaccineAppointmentCreateDto) throws BadRequestException {
 
-        try {
-            List<VaccineAppointmentDto> vaccineAppointmentDtoList =
-                vaccineAppointmentService.appointUser(vaccineAppointmentCreateDto);
-            return new ResponseEntity<>(vaccineAppointmentDtoList, HttpStatus.CREATED);
-        } catch (TimeSlotFullException | UserGetException | VaccineCenterGetException
-                | UserAlreadyAppointedException exception) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        List<VaccineAppointmentDto> vaccineAppointmentDtoList =
+            vaccineAppointmentService.appointUser(vaccineAppointmentCreateDto);
+        return new ResponseEntity<>(vaccineAppointmentDtoList, HttpStatus.CREATED);
     }
 
     @GetMapping("/appointments/{patientId}")
-    public ResponseEntity<List<VaccineAppointmentDto>> getAppointments(@PathVariable long patientId) {
+    public ResponseEntity<List<VaccineAppointmentDto>> getAppointments(@PathVariable long patientId) throws NotFoundException {
 
-        try {
-            List<VaccineAppointmentDto> appointments = vaccineAppointmentService.getAppointments(patientId);
-            return new ResponseEntity<>(appointments, HttpStatus.OK);
-        } catch (UserGetException exception) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        List<VaccineAppointmentDto> appointments = vaccineAppointmentService.getAppointments(patientId);
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 
     @DeleteMapping("/appointments/cancel/{patientId}")
-    public ResponseEntity<Object> cancelAppointments(@PathVariable long patientId) {
+    public ResponseEntity<Object> cancelAppointments(@PathVariable long patientId) throws BadRequestException {
 
-        try {
-            vaccineAppointmentService.deleteAppointments(patientId);
-        } catch (UserGetException | UserNotAppointedException | AppointmentDeleteException exception) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        vaccineAppointmentService.deleteAppointments(patientId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
