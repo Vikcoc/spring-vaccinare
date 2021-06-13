@@ -73,6 +73,15 @@ public class UserService {
         return new UserDto(userOptional.get());
     }
 
+    public UserDto getUser(String userEmail) throws NotFoundException {
+        Optional<User> userOptional = userRepository.getByEmail(userEmail);
+        if (userOptional.isEmpty()) {
+            throw new NotFoundException(ErrorMessages.userNotFound);
+        }
+
+        return new UserDto(userOptional.get());
+    }
+
     public UserDto updateUser(Long userId, UserCreateDto userCreateDto) throws BadRequestException {
 
         Optional<User> userOptional = userRepository.findById(userId);

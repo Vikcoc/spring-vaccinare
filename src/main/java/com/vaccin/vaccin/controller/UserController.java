@@ -35,8 +35,14 @@ public class UserController {
     }
 
     @GetMapping("/users/get/{userId}")
-    public ResponseEntity<UserDto> retrieveUser(@PathVariable  Long userId) throws NotFoundException {
+    public ResponseEntity<UserDto> retrieveUser(@PathVariable Long userId) throws NotFoundException {
         UserDto userDto = userService.getUser(userId);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/getByEmail/{userEmail}")
+    public ResponseEntity<UserDto> retrieveUser(@PathVariable String userEmail) throws NotFoundException {
+        UserDto userDto = userService.getUser(userEmail);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
