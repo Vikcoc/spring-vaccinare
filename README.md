@@ -1,3 +1,4 @@
+
 # Aplicație vaccinare
 ## Prezentare generală
 Aplicație pentru programarea vaccinării împotriva virusului SARS-CoV-2 realizată ca proiect pentru materia "Metode de dezvoltare software", Facultatea de Matematică și Informatică, Universitatea din București.
@@ -8,7 +9,7 @@ Aplicație pentru programarea vaccinării împotriva virusului SARS-CoV-2 realiz
 * [Tudose Andrei-Daniel](https://github.com/andreitudose2000) - Back end developer
 ### Motivarea alegerii temei
 Echipa noastră a creat această aplicație deoarece tema ei este una de actualitate, aplicația noastră fiind creată în scopul facilitării procesului de vaccinare, atât pentru actorul administrativ, cât și pentru medici și pacienți. Aplicația noastră aduce utilizatorului ușurință de utilizare, claritate și control asupra entității sale virtuale.
-### [Demo]()
+### [Demo](https://youtu.be/ukiWPoFdAVo)
 ## Descrierea aplicației
 Aplicație Android care permite utilizatorului să se informeze despre infectarea cu virusul SARS-CoV-2 și despre vaccinarea împotriva acestui virus și să se programeze pentru vaccinare. Utilizatorul poate afla motive pentru care să se vaccineze, statistici, detalii despre evoluția bolii și tratament, metode de a se proteja, numere de telefon utile și sfaturi pentru gestionarea contextului pandemic actual. Utilizatorul poate accesa o harta a României unde să vadă toate centrele de vaccinare și să acceseze un astfel de centru pentru a se programa la vaccinare. Utilizatorul își poate vedea profilul său, care conține detalii despre contul său și despre programările lui, dar si un cod QR asociat contului. Aplicația permite și actualizarea datelor personale ale utilizatorului dacă acesta constată că a făcut o greșeala când a creat contul. Odata finalizată programarea pentru vaccinarea cu prima doză (acolo unde este cazul), programarea pentru doza rapel se face automat in funcție de tipul de vaccin care va fi administrat. 
 ## Backlog creation
